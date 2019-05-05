@@ -18,10 +18,12 @@ class Pelota
         void actualizarPosYVel();
         void chequearBordes();
         void dibujarPelota();
+        void cargarTextura();
 
     private:
         int id;
         vector<double> pos, vel;
+        GLuint tex;
 
         void drawHalfSphere(int lats, int longs, GLfloat r);
 };

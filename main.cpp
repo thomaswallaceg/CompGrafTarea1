@@ -2,8 +2,7 @@
 #include "SDL/SDL.h"
 #include "SDL/SDL_opengl.h"
 #include "FreeImage.h"
-#include <math.h>       /* sin */
-#include "FreeImage.h"
+#include <math.h>
 #include "include/Pelota.h"
 #include <chrono>
 #include <thread>
@@ -184,35 +183,6 @@ int main(int argc, char *argv[]) {
     glEnable(GL_DEPTH_TEST);
     glMatrixMode(GL_MODELVIEW);
 
-    // CARGAR TEXTURA BOLA
-    char* archivo = new char[20];
-    archivo = "canon.png";
-
-    FREE_IMAGE_FORMAT fif = FreeImage_GetFIFFromFilename(archivo);
-    FIBITMAP* bitmap = FreeImage_Load(fif, archivo);
-    bitmap = FreeImage_ConvertTo24Bits(bitmap);
-
-    int w = FreeImage_GetWidth(bitmap);
-    int h = FreeImage_GetHeight(bitmap);
-
-    void* datos = FreeImage_GetBits(bitmap);
-
-    GLuint textura;
-    glGenTextures(1, &textura);
-
-    glBindTexture(GL_TEXTURE_2D, textura);
-
-    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_BGR, GL_UNSIGNED_BYTE, datos);
-
-    delete datos;
-
     bool fin=false;
     SDL_Event evento;
 
@@ -229,21 +199,12 @@ int main(int argc, char *argv[]) {
     // VECTOR DE BOLAS
     glColor3f(0.5,0,0);
     std::vector<Pelota*> pelotas;
-    for (int i=0; i < 1; i++) pelotas.push_back(new Pelota(i));
-
-    //for (int i=0; i < 19; i++) pelotas[i]->setPos(0.8,0.5+i*0.5);
-    //for (int i=19; i < 38; i++) pelotas[i]->setPos(1.4,0.5+(i-19)*0.5);
-    //for (int i=38; i < 57; i++) pelotas[i]->setPos(2,0.5+(i-38)*0.5);
-    //for (int i=57; i < 76; i++) pelotas[i]->setPos(3,0.5+(i-57)*0.5);
-    //for (int i=76; i < 95; i++) pelotas[i]->setPos(4,0.5+(i-76)*0.5);
-
-    //for (int i=0; i < 19; i++) pelotas[i]->setVel(0,1);
-
-    pelotas[0]->setPos(2.5,5);
-    pelotas[0]->setVel(0,0);
-
-
-
+    for (int i=0; i < 16; i++){
+        pelotas.push_back(new Pelota(i));
+        pelotas[i]->setPos(2.5,0.5+i*0.5);
+        pelotas[i]->setVel(1,1);
+        pelotas[i]->cargarTextura();
+    }
 
     glTranslatef(2.5,5,-2.2);
 
@@ -274,9 +235,6 @@ int main(int argc, char *argv[]) {
 
         glTranslatef(0,0,-0.2);
         glColor3f(0.5,0,0);
-
-        glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, textura);
 
         for (int i=0; i < pelotas.size(); i++){
             pelotas[i]->actualizarPosYVel();
@@ -371,11 +329,3 @@ int main(int argc, char *argv[]) {
     }while(!fin);
     return 0;
 }
-
-
-
-
-
-
-
-////HOLA GIMENA PUEDE PUSHEAR

@@ -1,10 +1,10 @@
 #include "SDL/SDL.h"
 #include "SDL/SDL_opengl.h"
-#include "SDL/SDL_opengl.h"
+#include "FreeImage.h"
 #include "../include/Pelota.h"
 #include <iostream>
-#include <time.h>
 #include <math.h>
+#include <string>
 
 using namespace std;
 
@@ -14,21 +14,26 @@ Pelota::Pelota(int i)
     pos=vector<double>(2);
     vel=vector<double>(2);
     vel[0]=vel[1]=pos[0]=pos[1]=-1;
+    tex = 0;
 }
 
 Pelota::~Pelota(){}
 
 /* MOVIMIENTO */
 void Pelota::dibujarPelota(){
+
+    if (tex==0) cargarTextura();
+
     glPushMatrix();
+
     glTranslatef(pos[0],pos[1],0);
+
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, tex);
+
     drawHalfSphere(10, 10, 0.2);
+
     glPopMatrix();
-    /*
-    GLUquadric *quad = gluNewQuadric();
-    gluQuadricTexture(quad, true);
-    gluSphere(quad,0.2,10,10);
-    */
 }
 
 void Pelota::actualizarPosYVel(){
@@ -100,4 +105,36 @@ void Pelota::drawHalfSphere(int lats, int longs, GLfloat r) {
         }
         glEnd();
     }
+ }
+
+ void Pelota::cargarTextura(){
+     // CARGAR TEXTURA BOLA
+    string archivo = "pelotas/" + to_string(id) + ".png";
+
+    FREE_IMAGE_FORMAT fif = FreeImage_GetFIFFromFilename(archivo.c_str());
+    FIBITMAP* bitmap = FreeImage_Load(fif, archivo.c_str());
+    bitmap = FreeImage_ConvertTo24Bits(bitmap);
+
+    int w = FreeImage_GetWidth(bitmap);
+    int h = FreeImage_GetHeight(bitmap);
+
+    void* datos = FreeImage_GetBits(bitmap);
+
+    GLuint textura;
+    glGenTextures(1, &textura);
+
+    glBindTexture(GL_TEXTURE_2D, textura);
+
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_BGR, GL_UNSIGNED_BYTE, datos);
+
+    tex = textura;
+
+    delete datos;
  }
