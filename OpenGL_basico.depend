@@ -2357,7 +2357,7 @@
 	<math.h>
 	<string>
 
-1557156562 source:c:\users\gigi9\desktop\grafica\main.cpp
+1557164545 source:c:\users\gigi9\desktop\grafica\main.cpp
 	<iostream>
 	"SDL/SDL.h"
 	"SDL/SDL_opengl.h"
@@ -2575,10 +2575,10 @@
 	<wchar.h>
 	<inttypes.h>
 
-1557158987 c:\users\gigi9\desktop\grafica\include\pelota.h
+1557162849 c:\users\gigi9\desktop\grafica\include\pelota.h
 	<vector>
 
-1557159994 source:c:\users\gigi9\desktop\grafica\src\pelota.cpp
+1557164589 source:c:\users\gigi9\desktop\grafica\src\pelota.cpp
 	"SDL/SDL.h"
 	"SDL/SDL_opengl.h"
 	"FreeImage.h"

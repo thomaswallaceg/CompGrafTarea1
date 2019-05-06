@@ -308,11 +308,17 @@ int main(int argc, char *argv[]) {
     // VECTOR DE BOLAS
     glColor3f(0.5,0,0);
     std::vector<Pelota*> pelotas;
+    pelotas.push_back(new Pelota(10));
+    pelotas[0]->setPos(2.5,5);
+    pelotas[0]->setVel(0.5,0);
+
+    /*
     for (int i=0; i < 16; i++){
         pelotas.push_back(new Pelota(i));
         pelotas[i]->cargarTextura();
         pelotas[i]->setVel(0,0);
     }
+
     pelotas[0]->setPos(2.5,2.5);
     pelotas[1]->setPos(2.5,6.6392);
     pelotas[2]->setPos(2.3,7.0696);
@@ -331,7 +337,7 @@ int main(int argc, char *argv[]) {
     pelotas[15]->setPos(3.3,8.3608);
 
     pelotas[0]->setVel(0,1);
-
+    */
    /*     std::vector< glm::vec3 > vertices;
         std::vector< glm::vec2 > uvs;
         std::vector< glm::vec3 > normals; // No las usaremos por ahora

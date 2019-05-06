@@ -13,7 +13,9 @@ Pelota::Pelota(int i)
     id = i;
     pos=vector<double>(2);
     vel=vector<double>(2);
-    vel[0]=vel[1]=pos[0]=pos[1]=0;
+    lastPos=vector<double>(2);
+    angulos=vector<double>(2);
+    vel[0]=vel[1]=pos[0]=pos[1]=lastPos[0]=lastPos[1]=angulos[0]=angulos[1]=0;
     tex = 0;
     ultimoChoque = -1;
 }
@@ -22,12 +24,19 @@ Pelota::~Pelota(){}
 
 /* MOVIMIENTO */
 void Pelota::dibujarPelota(){
-
+    if (lastPos[0] != pos[0] || lastPos[1] != pos[1]){
+        angulos[0] = angulos[0] + 900/M_PI * (pos[0]-lastPos[0]);
+        angulos[1] = angulos[1] + 900/M_PI * (pos[1]-lastPos[1]);
+        while (angulos[0] > 360) angulos[0] = angulos[0] - 360;
+        while (angulos[1] > 360) angulos[1] = angulos[1] - 360;
+    }
     if (tex==0) cargarTextura();
 
     glPushMatrix();
 
     glTranslatef(pos[0],pos[1],0);
+    glRotatef(-angulos[0],0,1,0);
+    glRotatef(angulos[1],1,0,0);
 
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, tex);
@@ -38,13 +47,13 @@ void Pelota::dibujarPelota(){
 }
 
 void Pelota::actualizarPosYVel(){
-    //setLastPos(pos[0],pos[1]);
+    setLastPos(pos[0],pos[1]);
 
     pos[0] = pos[0] + vel[0]/8;
     pos[1] = pos[1] + vel[1]/8;
 
-    vel[0] = vel[0] * 0.99;
-    vel[1] = vel[1] * 0.99;
+    //vel[0] = vel[0] * 0.99;
+    //vel[1] = vel[1] * 0.99;
 }
 
 void Pelota::chequearBordes(){

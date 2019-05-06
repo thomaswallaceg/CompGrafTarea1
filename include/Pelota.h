@@ -15,6 +15,9 @@ class Pelota
         vector<double> getLastPos();
         void setLastPos(double x, double y);
 
+        vector<double> getAngulos();
+        void setAngulos(double x, double y);
+
         vector<double> getVel();
         void setVel(double x, double y);
 
@@ -28,7 +31,7 @@ class Pelota
 
     private:
         int id;
-        vector<double> pos, lastPos, vel;
+        vector<double> pos, lastPos, vel, angulos;
         GLuint tex;
         int ultimoChoque;
 
