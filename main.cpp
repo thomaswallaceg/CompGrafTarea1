@@ -130,18 +130,22 @@ void drawMesa(){
 }
 
 void chequearColision(std::vector<Pelota*> pelotas, int i, int j){
-    double dx = pelotas[i]->getPos()[0] - pelotas[j]->getPos()[0];
-    double dy = pelotas[i]->getPos()[1] - pelotas[j]->getPos()[1];
-    double dist = hypot(dx, dy);
-    if (dist < 0.4) {
-        std::vector<double> normal = {dx/dist, dy/dist};
-        std::vector<double> tangente = {-normal[1], normal[0]};
-        double vni = pelotas[i]->getVel()[0] * normal[0] + pelotas[i]->getVel()[1] * normal[1];
-        double vnj = pelotas[j]->getVel()[0] * normal[0] + pelotas[j]->getVel()[1] * normal[1];
-        double vti = pelotas[i]->getVel()[0] * tangente[0] + pelotas[i]->getVel()[1] * tangente[1];
-        double vtj = pelotas[j]->getVel()[0] * tangente[0] + pelotas[j]->getVel()[1] * tangente[1];
-        pelotas[i]->setVel(normal[0]*vnj + tangente[0]*vti, normal[1]*vnj + tangente[1]*vti);
-        pelotas[j]->setVel(normal[0]*vni + tangente[0]*vtj, normal[1]*vni + tangente[1]*vtj);
+    if (pelotas[i]->getUltimoChoque() != j && pelotas[j]->getUltimoChoque() != i) {
+        double dx = pelotas[i]->getPos()[0] - pelotas[j]->getPos()[0];
+        double dy = pelotas[i]->getPos()[1] - pelotas[j]->getPos()[1];
+        double dist = hypot(dx, dy);
+        if (dist < 0.4) {
+            pelotas[i]->setUltimoChoque(j);
+            pelotas[j]->setUltimoChoque(i);
+            std::vector<double> normal = {dx/dist, dy/dist};
+            std::vector<double> tangente = {-normal[1], normal[0]};
+            double vni = pelotas[i]->getVel()[0] * normal[0] + pelotas[i]->getVel()[1] * normal[1];
+            double vnj = pelotas[j]->getVel()[0] * normal[0] + pelotas[j]->getVel()[1] * normal[1];
+            double vti = pelotas[i]->getVel()[0] * tangente[0] + pelotas[i]->getVel()[1] * tangente[1];
+            double vtj = pelotas[j]->getVel()[0] * tangente[0] + pelotas[j]->getVel()[1] * tangente[1];
+            pelotas[i]->setVel(normal[0]*vnj + tangente[0]*vti, normal[1]*vnj + tangente[1]*vti);
+            pelotas[j]->setVel(normal[0]*vni + tangente[0]*vtj, normal[1]*vni + tangente[1]*vtj);
+        }
     }
 }
 
@@ -201,7 +205,7 @@ int main(int argc, char *argv[]) {
     std::vector<Pelota*> pelotas;
     for (int i=0; i < 16; i++){
         pelotas.push_back(new Pelota(i));
-        pelotas[i]->setPos(2.5,0.5+i*0.5);
+        pelotas[i]->setPos(2,1+i*0.5);
         pelotas[i]->setVel(1,1);
         pelotas[i]->cargarTextura();
     }

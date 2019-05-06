@@ -13,8 +13,9 @@ Pelota::Pelota(int i)
     id = i;
     pos=vector<double>(2);
     vel=vector<double>(2);
-    vel[0]=vel[1]=pos[0]=pos[1]=-1;
+    vel[0]=vel[1]=pos[0]=pos[1]=0;
     tex = 0;
+    ultimoChoque = -1;
 }
 
 Pelota::~Pelota(){}
@@ -37,18 +38,18 @@ void Pelota::dibujarPelota(){
 }
 
 void Pelota::actualizarPosYVel(){
-    pos[0] = pos[0] + vel[0]/32;
-    pos[1] = pos[1] + vel[1]/32;
+    pos[0] = pos[0] + vel[0]/8;
+    pos[1] = pos[1] + vel[1]/8;
 
-    //vel[0] = vel[0] * 0.9999;
-    //vel[1] = vel[1] * 0.9999;
+    vel[0] = vel[0] * 0.99;
+    vel[1] = vel[1] * 0.99;
 }
 
 void Pelota::chequearBordes(){
-    if (pos[0] <= 0.2 && vel[0] < 0) vel[0]=-vel[0];
-    if (pos[0] >= 4.8 && vel[0] > 0) vel[0]=-vel[0];
-    if (pos[1] <= 0.2 && vel[1] < 0) vel[1]=-vel[1];
-    if (pos[1] >= 9.8 && vel[1] > 0) vel[1]=-vel[1];
+    if (pos[0] <= 0.2 && vel[0] < 0) {vel[0]=-vel[0]; ultimoChoque = -1;}
+    if (pos[0] >= 4.8 && vel[0] > 0) {vel[0]=-vel[0]; ultimoChoque = -1;}
+    if (pos[1] <= 0.2 && vel[1] < 0) {vel[1]=-vel[1]; ultimoChoque = -1;}
+    if (pos[1] >= 9.8 && vel[1] > 0) {vel[1]=-vel[1]; ultimoChoque = -1;}
 }
 
 
@@ -70,6 +71,16 @@ void Pelota::setVel(double x, double y){
     vel[1] = y;
 }
 
+int Pelota::getUltimoChoque(){
+    return ultimoChoque;
+}
+
+void Pelota::setUltimoChoque(int i){
+    ultimoChoque = i;
+}
+
+
+// AUXILIARES
 void Pelota::drawHalfSphere(int lats, int longs, GLfloat r) {
    int i, j;
     int halfLats = lats;

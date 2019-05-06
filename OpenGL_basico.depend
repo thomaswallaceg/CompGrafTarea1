@@ -2129,7 +2129,7 @@
 	<math.h>
 	<string>
 
-1557098169 source:c:\users\thomas\desktop\tarea1\main.cpp
+1557100611 source:c:\users\thomas\desktop\tarea1\main.cpp
 	<iostream>
 	"SDL/SDL.h"
 	"SDL/SDL_opengl.h"
@@ -2345,10 +2345,10 @@
 	<wchar.h>
 	<inttypes.h>
 
-1557097201 c:\users\thomas\desktop\tarea1\include\pelota.h
+1557099513 c:\users\thomas\desktop\tarea1\include\pelota.h
 	<vector>
 
-1557097702 source:c:\users\thomas\desktop\tarea1\src\pelota.cpp
+1557100545 source:c:\users\thomas\desktop\tarea1\src\pelota.cpp
 	"SDL/SDL.h"
 	"SDL/SDL_opengl.h"
 	"FreeImage.h"

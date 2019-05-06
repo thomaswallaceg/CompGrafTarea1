@@ -15,6 +15,9 @@ class Pelota
         vector<double> getVel();
         void setVel(double x, double y);
 
+        int getUltimoChoque();
+        void setUltimoChoque(int i);
+
         void actualizarPosYVel();
         void chequearBordes();
         void dibujarPelota();
@@ -24,6 +27,7 @@ class Pelota
         int id;
         vector<double> pos, vel;
         GLuint tex;
+        int ultimoChoque;
 
         void drawHalfSphere(int lats, int longs, GLfloat r);
 };
