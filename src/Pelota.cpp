@@ -25,6 +25,8 @@ Pelota::~Pelota(){}
 /* MOVIMIENTO */
 void Pelota::dibujarPelota(){
     if (lastPos[0] != pos[0] || lastPos[1] != pos[1]){
+        dist = hypot(pos[0]-lastPos[0],pos[1]-lastPos[1])
+        angulo = 900/M_PI * dist;
         angulos[0] = angulos[0] + 900/M_PI * (pos[0]-lastPos[0]);
         angulos[1] = angulos[1] + 900/M_PI * (pos[1]-lastPos[1]);
         while (angulos[0] > 360) angulos[0] = angulos[0] - 360;
