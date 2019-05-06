@@ -38,6 +38,8 @@ void Pelota::dibujarPelota(){
 }
 
 void Pelota::actualizarPosYVel(){
+    //setLastPos(pos[0],pos[1]);
+
     pos[0] = pos[0] + vel[0]/8;
     pos[1] = pos[1] + vel[1]/8;
 
@@ -60,6 +62,14 @@ vector<double> Pelota::getPos(){
 void Pelota::setPos(double x, double y){
     pos[0] = x;
     pos[1] = y;
+}
+
+vector<double> Pelota::getLastPos(){
+    return lastPos;
+}
+void Pelota::setLastPos(double x, double y){
+    lastPos[0] = x;
+    lastPos[1] = y;
 }
 
 vector<double> Pelota::getVel(){

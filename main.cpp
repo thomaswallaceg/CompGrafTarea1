@@ -6,10 +6,115 @@
 #include "include/Pelota.h"
 #include <chrono>
 #include <thread>
+#include <.././glm/glm/vec3.hpp>
+#include <.././glm/glm/vec2.hpp>
 
 #define _USE_MATH_DEFINES
 #define FPS 60
 
+ //PRUEBA OBJETOS
+
+/*bool loadObj(const char * path,std::vector < glm::vec3 > & out_vertices,std::vector < glm::vec2 > & out_uvs,std::vector < glm::vec3 > & out_normals){
+    std::vector< unsigned int > vertexIndices, uvIndices, normalIndices;
+    std::vector< glm::vec3 > temp_vertices;
+    std::vector< glm::vec2 > temp_uvs;
+    std::vector< glm::vec3 > temp_normals;
+    FILE * file = fopen(path, "r");
+    if( file == NULL ){
+        printf("Impossible to open the file !\n");
+        return false;
+    }
+    while( 1 ){
+
+        char lineHeader[128];
+        // Lee la primera palabra de la línea
+        int res = fscanf(file, "%s", lineHeader);
+        if (res == EOF)
+            break; // EOF = End Of File, es decir, el final del archivo. Se finaliza el ciclo.
+        else if ( strcmp( lineHeader, "v" ) == 0 ){
+            glm::vec3 vertex;
+            fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z );
+            temp_vertices.push_back(vertex);
+        }else if ( strcmp( lineHeader, "vt" ) == 0 ){
+            glm::vec2 uv;
+            fscanf(file, "%f %f\n", &uv.x, &uv.y );
+            temp_uvs.push_back(uv);
+        }else if ( strcmp( lineHeader, "vn" ) == 0 ){
+            glm::vec3 normal;
+            fscanf(file, "%f %f %f\n", &normal.x, &normal.y, &normal.z );
+            temp_normals.push_back(normal);
+        }else if ( strcmp( lineHeader, "f" ) == 0 ){
+            std::string vertex1, vertex2, vertex3;
+            unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
+            int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2] );
+            if (matches != 9){
+                printf("File can't be read by our simple parser : ( Try exporting with other options\n");
+                return false;
+            }
+            vertexIndices.push_back(vertexIndex[0]);
+            vertexIndices.push_back(vertexIndex[1]);
+            vertexIndices.push_back(vertexIndex[2]);
+            uvIndices    .push_back(uvIndex[0]);
+            uvIndices    .push_back(uvIndex[1]);
+            uvIndices    .push_back(uvIndex[2]);
+            normalIndices.push_back(normalIndex[0]);
+            normalIndices.push_back(normalIndex[1]);
+            normalIndices.push_back(normalIndex[2]);
+        }
+    }
+    for( unsigned int i=0; i<vertexIndices.size(); i++ ){
+        unsigned int vertexIndex = vertexIndices[i];
+        glm::vec3 vertex = temp_vertices[ vertexIndex-1 ];
+        out_vertices.push_back(vertex);
+    }
+    for( unsigned int i=0; i<uvIndices.size(); i++ ){
+        unsigned int uvIndex = uvIndices[i];
+        glm::vec2 uv = temp_uvs[ uvIndex-1 ];
+        out_uvs.push_back(uv);
+    }
+    for( unsigned int i=0; i<normalIndices.size(); i++ ){
+        unsigned int normalIndex = normalIndices[i];
+        glm::vec3 normal = temp_normals[ normalIndex-1 ];
+        out_normals.push_back(normal);
+    }
+}
+*/
+/*GLuint elephant;
+
+void loadObj(char *fname)
+{
+    FILE *fp;
+    int read;
+    GLfloat x, y, z;
+    char ch;
+    elephant=glGenLists(1);
+    fp=fopen(fname,"r");
+    if (!fp)
+    {
+        printf("can't open file %s\n", fname);
+        exit(1);
+    }
+    glPointSize(2.0);
+    glNewList(elephant, GL_COMPILE);
+    {
+        glPushMatrix();
+        glBegin(GL_POINTS);
+        while(!(feof(fp)))
+        {
+            read=fscanf(fp,"%c %f %f %f",&ch,&x,&y,&z);
+            if(read==4&&ch=='v')
+            {
+                glVertex3f(x,y,z);
+            }
+        }
+        glEnd();
+    }
+    glPopMatrix();
+    glEndList();
+    fclose(fp);
+}
+
+*/
 void actualizarCam(float &x,float &y, float &z, float x_angle, float y_angle,float radius){
     z = cos(y_angle*M_PI/180) * cos(x_angle*M_PI/180) * radius;
     x = sin(y_angle*M_PI/180) * cos(x_angle*M_PI/180) * radius;
@@ -227,6 +332,11 @@ int main(int argc, char *argv[]) {
 
     pelotas[0]->setVel(0,1);
 
+   /*     std::vector< glm::vec3 > vertices;
+        std::vector< glm::vec2 > uvs;
+        std::vector< glm::vec3 > normals; // No las usaremos por ahora
+        //bool res = loadObj("mesa/mesa.obj", vertices, uvs, normals);
+        loadObj("mesa/mesa.obj");*/
     glTranslatef(2.5,5,-2.2);
 
     do{
@@ -257,6 +367,13 @@ int main(int argc, char *argv[]) {
         glTranslatef(0,0,-0.2);
         glColor3f(0.5,0,0);
 
+
+
+
+
+
+
+
         for (int i=0; i < pelotas.size(); i++){
             pelotas[i]->actualizarPosYVel();
             pelotas[i]->chequearBordes();
@@ -264,6 +381,41 @@ int main(int argc, char *argv[]) {
                 chequearColision(pelotas,i,j);
             pelotas[i]->dibujarPelota();
         }
+
+
+        //PRUEBA IMPORT OBJETOS
+
+       // glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
+
+   /*     glEnableVertexAttribArray(attribute_v_coord);
+  // Describe our vertices array to OpenGL (it can't guess its format automatically)
+  glBindBuffer(GL_ARRAY_BUFFER, vbo_mesh_vertices);
+  glVertexAttribPointer(
+    attribute_v_coord,  // attribute
+    4,                  // number of elements per vertex, here (x,y,z,w)
+    GL_FLOAT,           // the type of each element
+    GL_FALSE,           // take our values as-is
+    0,                  // no extra data between each position
+    0                   // offset of first element
+  );
+
+  glEnableVertexAttribArray(attribute_v_normal);
+  glBindBuffer(GL_ARRAY_BUFFER, vbo_mesh_normals);
+  glVertexAttribPointer(
+    attribute_v_normal, // attribute
+    3,                  // number of elements per vertex, here (x,y,z)
+    GL_FLOAT,           // the type of each element
+    GL_FALSE,           // take our values as-is
+    0,                  // no extra data between each position
+    0                   // offset of first element
+  );
+
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo_mesh_elements);
+  int size;  glGetBufferParameteriv(GL_ELEMENT_ARRAY_BUFFER, GL_BUFFER_SIZE, &size);
+  glDrawElements(GL_TRIANGLES, size/sizeof(GLushort), GL_UNSIGNED_SHORT, 0);
+*/
+
+        //PRUEBA IMPORT OBJETOS
 
         glPopMatrix();
         glEnd();
