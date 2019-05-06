@@ -205,10 +205,27 @@ int main(int argc, char *argv[]) {
     std::vector<Pelota*> pelotas;
     for (int i=0; i < 16; i++){
         pelotas.push_back(new Pelota(i));
-        pelotas[i]->setPos(2,1+i*0.5);
-        pelotas[i]->setVel(1,1);
         pelotas[i]->cargarTextura();
+        pelotas[i]->setVel(0,0);
     }
+    pelotas[0]->setPos(2.5,2.5);
+    pelotas[1]->setPos(2.5,6.6392);
+    pelotas[2]->setPos(2.3,7.0696);
+    pelotas[3]->setPos(2.7,7.0696);
+    pelotas[4]->setPos(2.1,7.5);
+    pelotas[5]->setPos(2.5,7.5);
+    pelotas[6]->setPos(2.9,7.5);
+    pelotas[7]->setPos(1.9,7.9304);
+    pelotas[8]->setPos(2.3,7.9304);
+    pelotas[9]->setPos(2.7,7.9304);
+    pelotas[10]->setPos(3.1,7.9304);
+    pelotas[11]->setPos(1.7,8.3608);
+    pelotas[12]->setPos(2.1,8.3608);
+    pelotas[13]->setPos(2.5,8.3608);
+    pelotas[14]->setPos(2.9,8.3608);
+    pelotas[15]->setPos(3.3,8.3608);
+
+    pelotas[0]->setVel(0,1);
 
     glTranslatef(2.5,5,-2.2);
 

@@ -2129,7 +2129,7 @@
 	<math.h>
 	<string>
 
-1557100611 source:c:\users\thomas\desktop\tarea1\main.cpp
+1557102271 source:c:\users\thomas\desktop\tarea1\main.cpp
 	<iostream>
 	"SDL/SDL.h"
 	"SDL/SDL_opengl.h"
