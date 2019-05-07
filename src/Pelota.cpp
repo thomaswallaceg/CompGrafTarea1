@@ -6,6 +6,8 @@
 #include <math.h>
 #include <string>
 
+#define PI 3.14159265
+
 using namespace std;
 
 Pelota::Pelota(int i)
@@ -25,10 +27,8 @@ Pelota::~Pelota(){}
 /* MOVIMIENTO */
 void Pelota::dibujarPelota(){
     if (lastPos[0] != pos[0] || lastPos[1] != pos[1]){
-        dist = hypot(pos[0]-lastPos[0],pos[1]-lastPos[1])
-        angulo = 900/M_PI * dist;
-        angulos[0] = angulos[0] + 900/M_PI * (pos[0]-lastPos[0]);
-        angulos[1] = angulos[1] + 900/M_PI * (pos[1]-lastPos[1]);
+        angulos[0] = angulos[0] + 900/3.141592 * (pos[0]-lastPos[0]);
+        angulos[1] = angulos[1] + 900/3.141592 * (pos[1]-lastPos[1]);
         while (angulos[0] > 360) angulos[0] = angulos[0] - 360;
         while (angulos[1] > 360) angulos[1] = angulos[1] - 360;
     }
@@ -37,8 +37,8 @@ void Pelota::dibujarPelota(){
     glPushMatrix();
 
     glTranslatef(pos[0],pos[1],0);
-    glRotatef(-angulos[0],0,1,0);
     glRotatef(angulos[1],1,0,0);
+    glRotatef(-angulos[0],0,1,0);
 
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, tex);
@@ -51,11 +51,14 @@ void Pelota::dibujarPelota(){
 void Pelota::actualizarPosYVel(){
     setLastPos(pos[0],pos[1]);
 
-    pos[0] = pos[0] + vel[0]/8;
-    pos[1] = pos[1] + vel[1]/8;
+    pos[0] = pos[0] + vel[0];
+    pos[1] = pos[1] + vel[1];
 
-    //vel[0] = vel[0] * 0.99;
-    //vel[1] = vel[1] * 0.99;
+    vel[0] = vel[0] * 0.99;
+    vel[1] = vel[1] * 0.99;
+
+    if (vel[0] < 0.0001 and vel[0] > -0.0001) vel[0]=0;
+    if (vel[1] < 0.0001 and vel[1] > -0.0001) vel[1]=0;
 }
 
 void Pelota::chequearBordes(){
@@ -107,18 +110,18 @@ void Pelota::drawHalfSphere(int lats, int longs, GLfloat r) {
     int halfLats = lats;
     for(i = 0; i <= halfLats; i++)
     {
-        double lat0 = M_PI * (-0.5 + (double) (i - 1) / lats);
+        double lat0 = 3.141592 * (-0.5 + (double) (i - 1) / lats);
         double z0 = sin(lat0);
         double zr0 = cos(lat0);
 
-        double lat1 = M_PI * (-0.5 + (double) i / lats);
+        double lat1 = 3.141592 * (-0.5 + (double) i / lats);
         double z1 = sin(lat1);
         double zr1 = cos(lat1);
 
         glBegin(GL_QUAD_STRIP);
         for(j = 0; j <= longs; j++)
         {
-            double lng = 2 * M_PI * (double) (j - 1) / longs;
+            double lng = 2 * 3.141592 * (double) (j - 1) / longs;
             double x = cos(lng);
             double y = sin(lng);
 
@@ -141,7 +144,7 @@ void Pelota::drawHalfSphere(int lats, int longs, GLfloat r) {
 
  void Pelota::cargarTextura(){
      // CARGAR TEXTURA BOLA
-    string archivo = "pelotas/" + to_string(id) + ".png";
+    string archivo = "pelotas/10.png";
 
     FREE_IMAGE_FORMAT fif = FreeImage_GetFIFFromFilename(archivo.c_str());
     FIBITMAP* bitmap = FreeImage_Load(fif, archivo.c_str());
