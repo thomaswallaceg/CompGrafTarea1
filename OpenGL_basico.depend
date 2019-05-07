@@ -1,0 +1,1081 @@
+# depslib dependency file v1.0
+1557178521 source:c:\users\bedelia\desktop\grafica\main.cpp
+	<iostream>
+	"SDL/SDL.h"
+	"SDL/SDL_opengl.h"
+	"FreeImage.h"
+	<math.h>
+	"include/Pelota.h"
+	<chrono>
+	<thread>
+	<.././glm/glm/vec3.hpp>
+	<.././glm/glm/vec2.hpp>
+
+1557096648 c:\users\bedelia\desktop\grafica\sdl-1.2.15\include\sdl\sdl.h
+	"SDL_main.h"
+	"SDL_stdinc.h"
+	"SDL_audio.h"
+	"SDL_cdrom.h"
+	"SDL_cpuinfo.h"
+	"SDL_endian.h"
+	"SDL_error.h"
+	"SDL_events.h"
+	"SDL_loadso.h"
+	"SDL_mutex.h"
+	"SDL_rwops.h"
+	"SDL_thread.h"
+	"SDL_timer.h"
+	"SDL_video.h"
+	"SDL_version.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557096648 c:\users\bedelia\desktop\grafica\sdl-1.2.15\include\sdl\sdl_main.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557096648 c:\users\bedelia\desktop\grafica\sdl-1.2.15\include\sdl\sdl_stdinc.h
+	"SDL_config.h"
+	<sys/types.h>
+	<stdio.h>
+	<stdlib.h>
+	<stddef.h>
+	<stdarg.h>
+	<stdlib.h>
+	<malloc.h>
+	<stddef.h>
+	<stdarg.h>
+	<memory.h>
+	<string.h>
+	<strings.h>
+	<inttypes.h>
+	<stdint.h>
+	<ctype.h>
+	<iconv.h>
+	"begin_code.h"
+	<alloca.h>
+	<malloc.h>
+	<malloc.h>
+	<malloc.h>
+	<stdlib.h>
+	"close_code.h"
+
+1557096648 c:\users\bedelia\desktop\grafica\sdl-1.2.15\include\sdl\sdl_config.h
+	"SDL_platform.h"
+	"SDL_config_dreamcast.h"
+	"SDL_config_macos.h"
+	"SDL_config_macosx.h"
+	"SDL_config_symbian.h"
+	"SDL_config_win32.h"
+	"SDL_config_os2.h"
+	"SDL_config_minimal.h"
+
+1557096648 c:\users\bedelia\desktop\grafica\sdl-1.2.15\include\sdl\sdl_platform.h
+
+1557096648 c:\users\bedelia\desktop\grafica\sdl-1.2.15\include\sdl\sdl_config_win32.h
+	"SDL_platform.h"
+
+1557096648 c:\users\bedelia\desktop\grafica\sdl-1.2.15\include\sdl\begin_code.h
+
+1557096648 c:\users\bedelia\desktop\grafica\sdl-1.2.15\include\sdl\close_code.h
+
+1557096648 c:\users\bedelia\desktop\grafica\sdl-1.2.15\include\sdl\sdl_audio.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_endian.h"
+	"SDL_mutex.h"
+	"SDL_thread.h"
+	"SDL_rwops.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557096648 c:\users\bedelia\desktop\grafica\sdl-1.2.15\include\sdl\sdl_error.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557096648 c:\users\bedelia\desktop\grafica\sdl-1.2.15\include\sdl\sdl_endian.h
+	"SDL_stdinc.h"
+	<endian.h>
+	"begin_code.h"
+	"close_code.h"
+
+1557096648 c:\users\bedelia\desktop\grafica\sdl-1.2.15\include\sdl\sdl_mutex.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557096648 c:\users\bedelia\desktop\grafica\sdl-1.2.15\include\sdl\sdl_thread.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_mutex.h"
+	"begin_code.h"
+	<process.h>
+	"close_code.h"
+
+1557096648 c:\users\bedelia\desktop\grafica\sdl-1.2.15\include\sdl\sdl_rwops.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557096648 c:\users\bedelia\desktop\grafica\sdl-1.2.15\include\sdl\sdl_cdrom.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557096648 c:\users\bedelia\desktop\grafica\sdl-1.2.15\include\sdl\sdl_cpuinfo.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557096648 c:\users\bedelia\desktop\grafica\sdl-1.2.15\include\sdl\sdl_events.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_active.h"
+	"SDL_keyboard.h"
+	"SDL_mouse.h"
+	"SDL_joystick.h"
+	"SDL_quit.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557096648 c:\users\bedelia\desktop\grafica\sdl-1.2.15\include\sdl\sdl_active.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557096648 c:\users\bedelia\desktop\grafica\sdl-1.2.15\include\sdl\sdl_keyboard.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_keysym.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557096648 c:\users\bedelia\desktop\grafica\sdl-1.2.15\include\sdl\sdl_keysym.h
+
+1557096648 c:\users\bedelia\desktop\grafica\sdl-1.2.15\include\sdl\sdl_mouse.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557096648 c:\users\bedelia\desktop\grafica\sdl-1.2.15\include\sdl\sdl_video.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_rwops.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557096648 c:\users\bedelia\desktop\grafica\sdl-1.2.15\include\sdl\sdl_joystick.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557096648 c:\users\bedelia\desktop\grafica\sdl-1.2.15\include\sdl\sdl_quit.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+
+1557096648 c:\users\bedelia\desktop\grafica\sdl-1.2.15\include\sdl\sdl_loadso.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557096648 c:\users\bedelia\desktop\grafica\sdl-1.2.15\include\sdl\sdl_timer.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557096648 c:\users\bedelia\desktop\grafica\sdl-1.2.15\include\sdl\sdl_version.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557096648 c:\users\bedelia\desktop\grafica\sdl-1.2.15\include\sdl\sdl_opengl.h
+	"SDL_config.h"
+	<windows.h>
+	<OpenGL/gl.h>
+	<OpenGL/glu.h>
+	<gl.h>
+	<glu.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<windows.h>
+	<stddef.h>
+
+1557096646 c:\users\bedelia\desktop\grafica\freeimage\freeimage.h
+	<wchar.h>
+	<inttypes.h>
+
+1557177261 c:\users\bedelia\desktop\grafica\include\pelota.h
+	<vector>
+
+1533818824 c:\users\bedelia\desktop\grafica\glm\glm\vec3.hpp
+	"./ext/vector_bool3.hpp"
+	"./ext/vector_bool3_precision.hpp"
+	"./ext/vector_float3.hpp"
+	"./ext/vector_float3_precision.hpp"
+	"./ext/vector_double3.hpp"
+	"./ext/vector_double3_precision.hpp"
+	"./ext/vector_int3.hpp"
+	"./ext/vector_int3_precision.hpp"
+	"./ext/vector_uint3.hpp"
+	"./ext/vector_uint3_precision.hpp"
+
+1537176752 c:\users\bedelia\desktop\grafica\glm\glm\ext\vector_bool3.hpp
+	"../detail/type_vec3.hpp"
+
+1540992242 c:\users\bedelia\desktop\grafica\glm\glm\detail\type_vec3.hpp
+	"qualifier.hpp"
+	"_swizzle.hpp"
+	"_swizzle_func.hpp"
+	<cstddef>
+	"type_vec3.inl"
+
+1537202928 c:\users\bedelia\desktop\grafica\glm\glm\detail\qualifier.hpp
+	"setup.hpp"
+
+1554197232 c:\users\bedelia\desktop\grafica\glm\glm\detail\setup.hpp
+	<cassert>
+	<cstddef>
+	"../simd/platform.h"
+	<cstdint>
+	<type_traits>
+
+1547205368 c:\users\bedelia\desktop\grafica\glm\glm\simd\platform.h
+	<cuda.h>
+	<immintrin.h>
+	<immintrin.h>
+	<popcntintrin.h>
+	<nmmintrin.h>
+	<smmintrin.h>
+	<tmmintrin.h>
+	<pmmintrin.h>
+	<emmintrin.h>
+
+1535531572 c:\users\bedelia\desktop\grafica\glm\glm\detail\_swizzle.hpp
+
+1535531572 c:\users\bedelia\desktop\grafica\glm\glm\detail\_swizzle_func.hpp
+
+1540992242 c:\users\bedelia\desktop\grafica\glm\glm\detail\type_vec3.inl
+	"compute_vector_relational.hpp"
+
+1533818822 c:\users\bedelia\desktop\grafica\glm\glm\detail\compute_vector_relational.hpp
+	"setup.hpp"
+	<limits>
+
+1537176752 c:\users\bedelia\desktop\grafica\glm\glm\ext\vector_bool3_precision.hpp
+	"../detail/type_vec3.hpp"
+
+1537176752 c:\users\bedelia\desktop\grafica\glm\glm\ext\vector_float3.hpp
+	"../detail/type_vec3.hpp"
+
+1537176752 c:\users\bedelia\desktop\grafica\glm\glm\ext\vector_float3_precision.hpp
+	"../detail/type_vec3.hpp"
+
+1537176752 c:\users\bedelia\desktop\grafica\glm\glm\ext\vector_double3.hpp
+	"../detail/type_vec3.hpp"
+
+1537176752 c:\users\bedelia\desktop\grafica\glm\glm\ext\vector_double3_precision.hpp
+	"../detail/type_vec3.hpp"
+
+1537176752 c:\users\bedelia\desktop\grafica\glm\glm\ext\vector_int3.hpp
+	"../detail/type_vec3.hpp"
+
+1537176752 c:\users\bedelia\desktop\grafica\glm\glm\ext\vector_int3_precision.hpp
+	"../detail/type_vec3.hpp"
+
+1537176752 c:\users\bedelia\desktop\grafica\glm\glm\ext\vector_uint3.hpp
+	"../detail/type_vec3.hpp"
+
+1537176752 c:\users\bedelia\desktop\grafica\glm\glm\ext\vector_uint3_precision.hpp
+	"../detail/type_vec3.hpp"
+
+1533818824 c:\users\bedelia\desktop\grafica\glm\glm\vec2.hpp
+	"./ext/vector_bool2.hpp"
+	"./ext/vector_bool2_precision.hpp"
+	"./ext/vector_float2.hpp"
+	"./ext/vector_float2_precision.hpp"
+	"./ext/vector_double2.hpp"
+	"./ext/vector_double2_precision.hpp"
+	"./ext/vector_int2.hpp"
+	"./ext/vector_int2_precision.hpp"
+	"./ext/vector_uint2.hpp"
+	"./ext/vector_uint2_precision.hpp"
+
+1537176752 c:\users\bedelia\desktop\grafica\glm\glm\ext\vector_bool2.hpp
+	"../detail/type_vec2.hpp"
+
+1540992242 c:\users\bedelia\desktop\grafica\glm\glm\detail\type_vec2.hpp
+	"qualifier.hpp"
+	"_swizzle.hpp"
+	"_swizzle_func.hpp"
+	<cstddef>
+	"type_vec2.inl"
+
+1540992242 c:\users\bedelia\desktop\grafica\glm\glm\detail\type_vec2.inl
+	"./compute_vector_relational.hpp"
+
+1537176752 c:\users\bedelia\desktop\grafica\glm\glm\ext\vector_bool2_precision.hpp
+	"../detail/type_vec2.hpp"
+
+1537176752 c:\users\bedelia\desktop\grafica\glm\glm\ext\vector_float2.hpp
+	"../detail/type_vec2.hpp"
+
+1537176752 c:\users\bedelia\desktop\grafica\glm\glm\ext\vector_float2_precision.hpp
+	"../detail/type_vec2.hpp"
+
+1537176752 c:\users\bedelia\desktop\grafica\glm\glm\ext\vector_double2.hpp
+	"../detail/type_vec2.hpp"
+
+1537176752 c:\users\bedelia\desktop\grafica\glm\glm\ext\vector_double2_precision.hpp
+	"../detail/type_vec2.hpp"
+
+1537176752 c:\users\bedelia\desktop\grafica\glm\glm\ext\vector_int2.hpp
+	"../detail/type_vec2.hpp"
+
+1537176752 c:\users\bedelia\desktop\grafica\glm\glm\ext\vector_int2_precision.hpp
+	"../detail/type_vec2.hpp"
+
+1537176752 c:\users\bedelia\desktop\grafica\glm\glm\ext\vector_uint2.hpp
+	"../detail/type_vec2.hpp"
+
+1537176752 c:\users\bedelia\desktop\grafica\glm\glm\ext\vector_uint2_precision.hpp
+	"../detail/type_vec2.hpp"
+
+1557178256 source:c:\users\bedelia\desktop\grafica\src\pelota.cpp
+	"SDL/SDL.h"
+	"SDL/SDL_opengl.h"
+	"FreeImage.h"
+	"../include/Pelota.h"
+	<iostream>
+	<math.h>
+	<string>
+
+1557196004 source:c:\users\thomas\desktop\grafica\main.cpp
+	<iostream>
+	"SDL/SDL.h"
+	"SDL/SDL_opengl.h"
+	"FreeImage.h"
+	<math.h>
+	"include/Pelota.h"
+	<chrono>
+	<thread>
+	<.././glm/glm/vec3.hpp>
+	<.././glm/glm/vec2.hpp>
+
+1557196075 c:\users\thomas\desktop\grafica\sdl-1.2.15\include\sdl\sdl.h
+	"SDL_main.h"
+	"SDL_stdinc.h"
+	"SDL_audio.h"
+	"SDL_cdrom.h"
+	"SDL_cpuinfo.h"
+	"SDL_endian.h"
+	"SDL_error.h"
+	"SDL_events.h"
+	"SDL_loadso.h"
+	"SDL_mutex.h"
+	"SDL_rwops.h"
+	"SDL_thread.h"
+	"SDL_timer.h"
+	"SDL_video.h"
+	"SDL_version.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557196075 c:\users\thomas\desktop\grafica\sdl-1.2.15\include\sdl\sdl_main.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557196075 c:\users\thomas\desktop\grafica\sdl-1.2.15\include\sdl\sdl_stdinc.h
+	"SDL_config.h"
+	<sys/types.h>
+	<stdio.h>
+	<stdlib.h>
+	<stddef.h>
+	<stdarg.h>
+	<stdlib.h>
+	<malloc.h>
+	<stddef.h>
+	<stdarg.h>
+	<memory.h>
+	<string.h>
+	<strings.h>
+	<inttypes.h>
+	<stdint.h>
+	<ctype.h>
+	<iconv.h>
+	"begin_code.h"
+	<alloca.h>
+	<malloc.h>
+	<malloc.h>
+	<malloc.h>
+	<stdlib.h>
+	"close_code.h"
+
+1557196075 c:\users\thomas\desktop\grafica\sdl-1.2.15\include\sdl\sdl_config.h
+	"SDL_platform.h"
+	"SDL_config_dreamcast.h"
+	"SDL_config_macos.h"
+	"SDL_config_macosx.h"
+	"SDL_config_symbian.h"
+	"SDL_config_win32.h"
+	"SDL_config_os2.h"
+	"SDL_config_minimal.h"
+
+1557196075 c:\users\thomas\desktop\grafica\sdl-1.2.15\include\sdl\sdl_platform.h
+
+1557196075 c:\users\thomas\desktop\grafica\sdl-1.2.15\include\sdl\sdl_config_win32.h
+	"SDL_platform.h"
+
+1557196075 c:\users\thomas\desktop\grafica\sdl-1.2.15\include\sdl\begin_code.h
+
+1557196075 c:\users\thomas\desktop\grafica\sdl-1.2.15\include\sdl\close_code.h
+
+1557196075 c:\users\thomas\desktop\grafica\sdl-1.2.15\include\sdl\sdl_audio.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_endian.h"
+	"SDL_mutex.h"
+	"SDL_thread.h"
+	"SDL_rwops.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557196075 c:\users\thomas\desktop\grafica\sdl-1.2.15\include\sdl\sdl_error.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557196075 c:\users\thomas\desktop\grafica\sdl-1.2.15\include\sdl\sdl_endian.h
+	"SDL_stdinc.h"
+	<endian.h>
+	"begin_code.h"
+	"close_code.h"
+
+1557196075 c:\users\thomas\desktop\grafica\sdl-1.2.15\include\sdl\sdl_mutex.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557196075 c:\users\thomas\desktop\grafica\sdl-1.2.15\include\sdl\sdl_thread.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_mutex.h"
+	"begin_code.h"
+	<process.h>
+	"close_code.h"
+
+1557196075 c:\users\thomas\desktop\grafica\sdl-1.2.15\include\sdl\sdl_rwops.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557196075 c:\users\thomas\desktop\grafica\sdl-1.2.15\include\sdl\sdl_cdrom.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557196075 c:\users\thomas\desktop\grafica\sdl-1.2.15\include\sdl\sdl_cpuinfo.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557196075 c:\users\thomas\desktop\grafica\sdl-1.2.15\include\sdl\sdl_events.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_active.h"
+	"SDL_keyboard.h"
+	"SDL_mouse.h"
+	"SDL_joystick.h"
+	"SDL_quit.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557196075 c:\users\thomas\desktop\grafica\sdl-1.2.15\include\sdl\sdl_active.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557196075 c:\users\thomas\desktop\grafica\sdl-1.2.15\include\sdl\sdl_keyboard.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_keysym.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557196075 c:\users\thomas\desktop\grafica\sdl-1.2.15\include\sdl\sdl_keysym.h
+
+1557196075 c:\users\thomas\desktop\grafica\sdl-1.2.15\include\sdl\sdl_mouse.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557196075 c:\users\thomas\desktop\grafica\sdl-1.2.15\include\sdl\sdl_video.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_rwops.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557196075 c:\users\thomas\desktop\grafica\sdl-1.2.15\include\sdl\sdl_joystick.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557196075 c:\users\thomas\desktop\grafica\sdl-1.2.15\include\sdl\sdl_quit.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+
+1557196075 c:\users\thomas\desktop\grafica\sdl-1.2.15\include\sdl\sdl_loadso.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557196075 c:\users\thomas\desktop\grafica\sdl-1.2.15\include\sdl\sdl_timer.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557196075 c:\users\thomas\desktop\grafica\sdl-1.2.15\include\sdl\sdl_version.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557196075 c:\users\thomas\desktop\grafica\sdl-1.2.15\include\sdl\sdl_opengl.h
+	"SDL_config.h"
+	<windows.h>
+	<OpenGL/gl.h>
+	<OpenGL/glu.h>
+	<gl.h>
+	<glu.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<windows.h>
+	<stddef.h>
+
+1557196030 c:\users\thomas\desktop\grafica\freeimage\freeimage.h
+	<wchar.h>
+	<inttypes.h>
+
+1557196065 c:\users\thomas\desktop\grafica\include\pelota.h
+	<vector>
+
+1557196055 c:\users\thomas\desktop\grafica\glm\glm\vec3.hpp
+	"./ext/vector_bool3.hpp"
+	"./ext/vector_bool3_precision.hpp"
+	"./ext/vector_float3.hpp"
+	"./ext/vector_float3_precision.hpp"
+	"./ext/vector_double3.hpp"
+	"./ext/vector_double3_precision.hpp"
+	"./ext/vector_int3.hpp"
+	"./ext/vector_int3_precision.hpp"
+	"./ext/vector_uint3.hpp"
+	"./ext/vector_uint3_precision.hpp"
+
+1557196057 c:\users\thomas\desktop\grafica\glm\glm\ext\vector_bool3.hpp
+	"../detail/type_vec3.hpp"
+
+1557196056 c:\users\thomas\desktop\grafica\glm\glm\detail\type_vec3.hpp
+	"qualifier.hpp"
+	"_swizzle.hpp"
+	"_swizzle_func.hpp"
+	<cstddef>
+	"type_vec3.inl"
+
+1557196055 c:\users\thomas\desktop\grafica\glm\glm\detail\qualifier.hpp
+	"setup.hpp"
+
+1557196055 c:\users\thomas\desktop\grafica\glm\glm\detail\setup.hpp
+	<cassert>
+	<cstddef>
+	"../simd/platform.h"
+	<cstdint>
+	<type_traits>
+
+1557196062 c:\users\thomas\desktop\grafica\glm\glm\simd\platform.h
+	<cuda.h>
+	<immintrin.h>
+	<immintrin.h>
+	<popcntintrin.h>
+	<nmmintrin.h>
+	<smmintrin.h>
+	<tmmintrin.h>
+	<pmmintrin.h>
+	<emmintrin.h>
+
+1557196056 c:\users\thomas\desktop\grafica\glm\glm\detail\_swizzle.hpp
+
+1557196056 c:\users\thomas\desktop\grafica\glm\glm\detail\_swizzle_func.hpp
+
+1557196056 c:\users\thomas\desktop\grafica\glm\glm\detail\type_vec3.inl
+	"compute_vector_relational.hpp"
+
+1557196055 c:\users\thomas\desktop\grafica\glm\glm\detail\compute_vector_relational.hpp
+	"setup.hpp"
+	<limits>
+
+1557196057 c:\users\thomas\desktop\grafica\glm\glm\ext\vector_bool3_precision.hpp
+	"../detail/type_vec3.hpp"
+
+1557196058 c:\users\thomas\desktop\grafica\glm\glm\ext\vector_float3.hpp
+	"../detail/type_vec3.hpp"
+
+1557196058 c:\users\thomas\desktop\grafica\glm\glm\ext\vector_float3_precision.hpp
+	"../detail/type_vec3.hpp"
+
+1557196058 c:\users\thomas\desktop\grafica\glm\glm\ext\vector_double3.hpp
+	"../detail/type_vec3.hpp"
+
+1557196058 c:\users\thomas\desktop\grafica\glm\glm\ext\vector_double3_precision.hpp
+	"../detail/type_vec3.hpp"
+
+1557196058 c:\users\thomas\desktop\grafica\glm\glm\ext\vector_int3.hpp
+	"../detail/type_vec3.hpp"
+
+1557196058 c:\users\thomas\desktop\grafica\glm\glm\ext\vector_int3_precision.hpp
+	"../detail/type_vec3.hpp"
+
+1557196058 c:\users\thomas\desktop\grafica\glm\glm\ext\vector_uint3.hpp
+	"../detail/type_vec3.hpp"
+
+1557196058 c:\users\thomas\desktop\grafica\glm\glm\ext\vector_uint3_precision.hpp
+	"../detail/type_vec3.hpp"
+
+1557196055 c:\users\thomas\desktop\grafica\glm\glm\vec2.hpp
+	"./ext/vector_bool2.hpp"
+	"./ext/vector_bool2_precision.hpp"
+	"./ext/vector_float2.hpp"
+	"./ext/vector_float2_precision.hpp"
+	"./ext/vector_double2.hpp"
+	"./ext/vector_double2_precision.hpp"
+	"./ext/vector_int2.hpp"
+	"./ext/vector_int2_precision.hpp"
+	"./ext/vector_uint2.hpp"
+	"./ext/vector_uint2_precision.hpp"
+
+1557196057 c:\users\thomas\desktop\grafica\glm\glm\ext\vector_bool2.hpp
+	"../detail/type_vec2.hpp"
+
+1557196056 c:\users\thomas\desktop\grafica\glm\glm\detail\type_vec2.hpp
+	"qualifier.hpp"
+	"_swizzle.hpp"
+	"_swizzle_func.hpp"
+	<cstddef>
+	"type_vec2.inl"
+
+1557196056 c:\users\thomas\desktop\grafica\glm\glm\detail\type_vec2.inl
+	"./compute_vector_relational.hpp"
+
+1557196057 c:\users\thomas\desktop\grafica\glm\glm\ext\vector_bool2_precision.hpp
+	"../detail/type_vec2.hpp"
+
+1557196058 c:\users\thomas\desktop\grafica\glm\glm\ext\vector_float2.hpp
+	"../detail/type_vec2.hpp"
+
+1557196058 c:\users\thomas\desktop\grafica\glm\glm\ext\vector_float2_precision.hpp
+	"../detail/type_vec2.hpp"
+
+1557196058 c:\users\thomas\desktop\grafica\glm\glm\ext\vector_double2.hpp
+	"../detail/type_vec2.hpp"
+
+1557196058 c:\users\thomas\desktop\grafica\glm\glm\ext\vector_double2_precision.hpp
+	"../detail/type_vec2.hpp"
+
+1557196058 c:\users\thomas\desktop\grafica\glm\glm\ext\vector_int2.hpp
+	"../detail/type_vec2.hpp"
+
+1557196058 c:\users\thomas\desktop\grafica\glm\glm\ext\vector_int2_precision.hpp
+	"../detail/type_vec2.hpp"
+
+1557196058 c:\users\thomas\desktop\grafica\glm\glm\ext\vector_uint2.hpp
+	"../detail/type_vec2.hpp"
+
+1557196058 c:\users\thomas\desktop\grafica\glm\glm\ext\vector_uint2_precision.hpp
+	"../detail/type_vec2.hpp"
+
+1557196004 source:c:\users\thomas\desktop\tarea1\main.cpp
+	<iostream>
+	"SDL/SDL.h"
+	"SDL/SDL_opengl.h"
+	"FreeImage.h"
+	<math.h>
+	"include/Pelota.h"
+	<chrono>
+	<thread>
+	<.././glm/glm/vec3.hpp>
+	<.././glm/glm/vec2.hpp>
+
+1557196075 c:\users\thomas\desktop\tarea1\sdl-1.2.15\include\sdl\sdl.h
+	"SDL_main.h"
+	"SDL_stdinc.h"
+	"SDL_audio.h"
+	"SDL_cdrom.h"
+	"SDL_cpuinfo.h"
+	"SDL_endian.h"
+	"SDL_error.h"
+	"SDL_events.h"
+	"SDL_loadso.h"
+	"SDL_mutex.h"
+	"SDL_rwops.h"
+	"SDL_thread.h"
+	"SDL_timer.h"
+	"SDL_video.h"
+	"SDL_version.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557196075 c:\users\thomas\desktop\tarea1\sdl-1.2.15\include\sdl\sdl_main.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557196075 c:\users\thomas\desktop\tarea1\sdl-1.2.15\include\sdl\sdl_stdinc.h
+	"SDL_config.h"
+	<sys/types.h>
+	<stdio.h>
+	<stdlib.h>
+	<stddef.h>
+	<stdarg.h>
+	<stdlib.h>
+	<malloc.h>
+	<stddef.h>
+	<stdarg.h>
+	<memory.h>
+	<string.h>
+	<strings.h>
+	<inttypes.h>
+	<stdint.h>
+	<ctype.h>
+	<iconv.h>
+	"begin_code.h"
+	<alloca.h>
+	<malloc.h>
+	<malloc.h>
+	<malloc.h>
+	<stdlib.h>
+	"close_code.h"
+
+1557196075 c:\users\thomas\desktop\tarea1\sdl-1.2.15\include\sdl\sdl_config.h
+	"SDL_platform.h"
+	"SDL_config_dreamcast.h"
+	"SDL_config_macos.h"
+	"SDL_config_macosx.h"
+	"SDL_config_symbian.h"
+	"SDL_config_win32.h"
+	"SDL_config_os2.h"
+	"SDL_config_minimal.h"
+
+1557196075 c:\users\thomas\desktop\tarea1\sdl-1.2.15\include\sdl\sdl_platform.h
+
+1557196075 c:\users\thomas\desktop\tarea1\sdl-1.2.15\include\sdl\sdl_config_win32.h
+	"SDL_platform.h"
+
+1557196075 c:\users\thomas\desktop\tarea1\sdl-1.2.15\include\sdl\begin_code.h
+
+1557196075 c:\users\thomas\desktop\tarea1\sdl-1.2.15\include\sdl\close_code.h
+
+1557196075 c:\users\thomas\desktop\tarea1\sdl-1.2.15\include\sdl\sdl_audio.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_endian.h"
+	"SDL_mutex.h"
+	"SDL_thread.h"
+	"SDL_rwops.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557196075 c:\users\thomas\desktop\tarea1\sdl-1.2.15\include\sdl\sdl_error.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557196075 c:\users\thomas\desktop\tarea1\sdl-1.2.15\include\sdl\sdl_endian.h
+	"SDL_stdinc.h"
+	<endian.h>
+	"begin_code.h"
+	"close_code.h"
+
+1557196075 c:\users\thomas\desktop\tarea1\sdl-1.2.15\include\sdl\sdl_mutex.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557196075 c:\users\thomas\desktop\tarea1\sdl-1.2.15\include\sdl\sdl_thread.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_mutex.h"
+	"begin_code.h"
+	<process.h>
+	"close_code.h"
+
+1557196075 c:\users\thomas\desktop\tarea1\sdl-1.2.15\include\sdl\sdl_rwops.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557196075 c:\users\thomas\desktop\tarea1\sdl-1.2.15\include\sdl\sdl_cdrom.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557196075 c:\users\thomas\desktop\tarea1\sdl-1.2.15\include\sdl\sdl_cpuinfo.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557196075 c:\users\thomas\desktop\tarea1\sdl-1.2.15\include\sdl\sdl_events.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_active.h"
+	"SDL_keyboard.h"
+	"SDL_mouse.h"
+	"SDL_joystick.h"
+	"SDL_quit.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557196075 c:\users\thomas\desktop\tarea1\sdl-1.2.15\include\sdl\sdl_active.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557196075 c:\users\thomas\desktop\tarea1\sdl-1.2.15\include\sdl\sdl_keyboard.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_keysym.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557196075 c:\users\thomas\desktop\tarea1\sdl-1.2.15\include\sdl\sdl_keysym.h
+
+1557196075 c:\users\thomas\desktop\tarea1\sdl-1.2.15\include\sdl\sdl_mouse.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557196075 c:\users\thomas\desktop\tarea1\sdl-1.2.15\include\sdl\sdl_video.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_rwops.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557196075 c:\users\thomas\desktop\tarea1\sdl-1.2.15\include\sdl\sdl_joystick.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557196075 c:\users\thomas\desktop\tarea1\sdl-1.2.15\include\sdl\sdl_quit.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+
+1557196075 c:\users\thomas\desktop\tarea1\sdl-1.2.15\include\sdl\sdl_loadso.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557196075 c:\users\thomas\desktop\tarea1\sdl-1.2.15\include\sdl\sdl_timer.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557196075 c:\users\thomas\desktop\tarea1\sdl-1.2.15\include\sdl\sdl_version.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1557196075 c:\users\thomas\desktop\tarea1\sdl-1.2.15\include\sdl\sdl_opengl.h
+	"SDL_config.h"
+	<windows.h>
+	<OpenGL/gl.h>
+	<OpenGL/glu.h>
+	<gl.h>
+	<glu.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<windows.h>
+	<stddef.h>
+
+1557196030 c:\users\thomas\desktop\tarea1\freeimage\freeimage.h
+	<wchar.h>
+	<inttypes.h>
+
+1557196065 c:\users\thomas\desktop\tarea1\include\pelota.h
+	<vector>
+
+1557196055 c:\users\thomas\desktop\tarea1\glm\glm\vec3.hpp
+	"./ext/vector_bool3.hpp"
+	"./ext/vector_bool3_precision.hpp"
+	"./ext/vector_float3.hpp"
+	"./ext/vector_float3_precision.hpp"
+	"./ext/vector_double3.hpp"
+	"./ext/vector_double3_precision.hpp"
+	"./ext/vector_int3.hpp"
+	"./ext/vector_int3_precision.hpp"
+	"./ext/vector_uint3.hpp"
+	"./ext/vector_uint3_precision.hpp"
+
+1557196057 c:\users\thomas\desktop\tarea1\glm\glm\ext\vector_bool3.hpp
+	"../detail/type_vec3.hpp"
+
+1557196056 c:\users\thomas\desktop\tarea1\glm\glm\detail\type_vec3.hpp
+	"qualifier.hpp"
+	"_swizzle.hpp"
+	"_swizzle_func.hpp"
+	<cstddef>
+	"type_vec3.inl"
+
+1557196055 c:\users\thomas\desktop\tarea1\glm\glm\detail\qualifier.hpp
+	"setup.hpp"
+
+1557196055 c:\users\thomas\desktop\tarea1\glm\glm\detail\setup.hpp
+	<cassert>
+	<cstddef>
+	"../simd/platform.h"
+	<cstdint>
+	<type_traits>
+
+1557196062 c:\users\thomas\desktop\tarea1\glm\glm\simd\platform.h
+	<cuda.h>
+	<immintrin.h>
+	<immintrin.h>
+	<popcntintrin.h>
+	<nmmintrin.h>
+	<smmintrin.h>
+	<tmmintrin.h>
+	<pmmintrin.h>
+	<emmintrin.h>
+
+1557196056 c:\users\thomas\desktop\tarea1\glm\glm\detail\_swizzle.hpp
+
+1557196056 c:\users\thomas\desktop\tarea1\glm\glm\detail\_swizzle_func.hpp
+
+1557196056 c:\users\thomas\desktop\tarea1\glm\glm\detail\type_vec3.inl
+	"compute_vector_relational.hpp"
+
+1557196055 c:\users\thomas\desktop\tarea1\glm\glm\detail\compute_vector_relational.hpp
+	"setup.hpp"
+	<limits>
+
+1557196057 c:\users\thomas\desktop\tarea1\glm\glm\ext\vector_bool3_precision.hpp
+	"../detail/type_vec3.hpp"
+
+1557196058 c:\users\thomas\desktop\tarea1\glm\glm\ext\vector_float3.hpp
+	"../detail/type_vec3.hpp"
+
+1557196058 c:\users\thomas\desktop\tarea1\glm\glm\ext\vector_float3_precision.hpp
+	"../detail/type_vec3.hpp"
+
+1557196058 c:\users\thomas\desktop\tarea1\glm\glm\ext\vector_double3.hpp
+	"../detail/type_vec3.hpp"
+
+1557196058 c:\users\thomas\desktop\tarea1\glm\glm\ext\vector_double3_precision.hpp
+	"../detail/type_vec3.hpp"
+
+1557196058 c:\users\thomas\desktop\tarea1\glm\glm\ext\vector_int3.hpp
+	"../detail/type_vec3.hpp"
+
+1557196058 c:\users\thomas\desktop\tarea1\glm\glm\ext\vector_int3_precision.hpp
+	"../detail/type_vec3.hpp"
+
+1557196058 c:\users\thomas\desktop\tarea1\glm\glm\ext\vector_uint3.hpp
+	"../detail/type_vec3.hpp"
+
+1557196058 c:\users\thomas\desktop\tarea1\glm\glm\ext\vector_uint3_precision.hpp
+	"../detail/type_vec3.hpp"
+
+1557196055 c:\users\thomas\desktop\tarea1\glm\glm\vec2.hpp
+	"./ext/vector_bool2.hpp"
+	"./ext/vector_bool2_precision.hpp"
+	"./ext/vector_float2.hpp"
+	"./ext/vector_float2_precision.hpp"
+	"./ext/vector_double2.hpp"
+	"./ext/vector_double2_precision.hpp"
+	"./ext/vector_int2.hpp"
+	"./ext/vector_int2_precision.hpp"
+	"./ext/vector_uint2.hpp"
+	"./ext/vector_uint2_precision.hpp"
+
+1557196057 c:\users\thomas\desktop\tarea1\glm\glm\ext\vector_bool2.hpp
+	"../detail/type_vec2.hpp"
+
+1557196056 c:\users\thomas\desktop\tarea1\glm\glm\detail\type_vec2.hpp
+	"qualifier.hpp"
+	"_swizzle.hpp"
+	"_swizzle_func.hpp"
+	<cstddef>
+	"type_vec2.inl"
+
+1557196056 c:\users\thomas\desktop\tarea1\glm\glm\detail\type_vec2.inl
+	"./compute_vector_relational.hpp"
+
+1557196057 c:\users\thomas\desktop\tarea1\glm\glm\ext\vector_bool2_precision.hpp
+	"../detail/type_vec2.hpp"
+
+1557196058 c:\users\thomas\desktop\tarea1\glm\glm\ext\vector_float2.hpp
+	"../detail/type_vec2.hpp"
+
+1557196058 c:\users\thomas\desktop\tarea1\glm\glm\ext\vector_float2_precision.hpp
+	"../detail/type_vec2.hpp"
+
+1557196058 c:\users\thomas\desktop\tarea1\glm\glm\ext\vector_double2.hpp
+	"../detail/type_vec2.hpp"
+
+1557196058 c:\users\thomas\desktop\tarea1\glm\glm\ext\vector_double2_precision.hpp
+	"../detail/type_vec2.hpp"
+
+1557196058 c:\users\thomas\desktop\tarea1\glm\glm\ext\vector_int2.hpp
+	"../detail/type_vec2.hpp"
+
+1557196058 c:\users\thomas\desktop\tarea1\glm\glm\ext\vector_int2_precision.hpp
+	"../detail/type_vec2.hpp"
+
+1557196058 c:\users\thomas\desktop\tarea1\glm\glm\ext\vector_uint2.hpp
+	"../detail/type_vec2.hpp"
+
+1557196058 c:\users\thomas\desktop\tarea1\glm\glm\ext\vector_uint2_precision.hpp
+	"../detail/type_vec2.hpp"
+
+1557196084 source:c:\users\thomas\desktop\tarea1\src\pelota.cpp
+	"SDL/SDL.h"
+	"SDL/SDL_opengl.h"
+	"FreeImage.h"
+	"../include/Pelota.h"
+	<iostream>
+	<math.h>
+	<string>
+
