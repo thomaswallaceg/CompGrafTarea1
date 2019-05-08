@@ -11,6 +11,7 @@
 #define FPS 60
 #define PI 3.14159265
 
+
 enum TipoCamara {libre, palo, techo};
 
 void dibujarPalo(float angPalo, float distPalo, double blancaX, double blancaY){
@@ -53,7 +54,7 @@ void actualizarCam(float &x,float &y, float &z, float x_angle, float y_angle,flo
 
 
 void chequearColision(std::vector<Pelota*> pelotas, int i, int j){
-    if (pelotas[i]->getUltimoChoque() != j && pelotas[j]->getUltimoChoque() != i) {
+    if (!(pelotas[i]->getUltimoChoque() == j && pelotas[j]->getUltimoChoque() == i)) {
         double dx = pelotas[i]->getPos()[0] - pelotas[j]->getPos()[0];
         double dy = pelotas[i]->getPos()[1] - pelotas[j]->getPos()[1];
         double dist = hypot(dx, dy);
@@ -75,13 +76,13 @@ void chequearColision(std::vector<Pelota*> pelotas, int i, int j){
 void shoot(Pelota* blanca,float angPalo, float distPalo){
     double velx = cos((angPalo-90)*PI/180);
     double vely = sin((angPalo-90)*PI/180);
-    blanca->setVel(velx*distPalo/3,vely*distPalo/3);
+    blanca->setVel((velx*distPalo/2)/3,(vely*distPalo/2)/3);
 }
 
 int main(int argc, char *argv[]) {
     //SDL
     if(SDL_Init(SDL_INIT_VIDEO)<0) {
-        cerr << "No se pudo iniciar SDL: " << SDL_GetError() << endl;
+        std::cerr << "No se pudo iniciar SDL: " << SDL_GetError() << std::endl;
         exit(1);
     }
     atexit(SDL_Quit);
@@ -89,12 +90,12 @@ int main(int argc, char *argv[]) {
     Uint32 flags = SDL_DOUBLEBUF | SDL_HWSURFACE | SDL_OPENGL;
 
     if(SDL_SetVideoMode(1280, 720, 32, flags)==NULL) {
-        cerr << "No se pudo establecer el modo de video: " << SDL_GetError() << endl;
+        std::cerr << "No se pudo establecer el modo de video: " << SDL_GetError() << std::endl;
         exit(1);
     }
 
     if(SDL_EnableKeyRepeat(10, 10)<0) {
-        cerr << "No se pudo establecer el modo key-repeat: " << SDL_GetError() << endl;
+        std::cerr << "No se pudo establecer el modo key-repeat: " << SDL_GetError() << std::endl;
         exit(1);
     }glColor3ub(34,139,34);
     glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
@@ -140,12 +141,12 @@ int main(int argc, char *argv[]) {
     bool botonIzquierdoApretado=false;
 
     // PELOTAS
-    glColor3f(0.5,0,0);
-    std::vector<Pelota*> pelotas;
-
     bool movimientoPelotas;
 
-    for (int i=0; i < 16; i++){
+    std::vector<Pelota*> pelotas;
+
+    pelotas.push_back(new Pelota(0));
+    for (int i=1; i < 16; i++){
         pelotas.push_back(new Pelota(i));
         pelotas[i]->setVel(0,0);
     }
@@ -169,10 +170,11 @@ int main(int argc, char *argv[]) {
 
     pelotas[0]->setVel(0,0);
 
-
+    //pelotas.push_back(new Pelota(3));
+    //pelotas[0]->setVel(0.1,0.1);
 
     do{
-        auto inicioTimer = chrono::steady_clock::now();
+        auto inicioTimer = std::chrono::steady_clock::now();
         //glTranslatef(2.5,5,-2.2);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glLoadIdentity();
@@ -209,11 +211,6 @@ int main(int argc, char *argv[]) {
 
         glTranslatef(0,0,-0.2);
         glColor3f(0.5,0,0);
-
-
-
-
-
 
         movimientoPelotas = false;
 
@@ -271,8 +268,8 @@ int main(int argc, char *argv[]) {
                         anga=angPalo;
                         actualizarCam(x,y,z,angb,anga,rad);
                     } else {
-                        distPalo += evento.motion.yrel*sens/2;
-                        if(distPalo>=3) distPalo=3;
+                        distPalo += evento.motion.yrel*sens/3;
+                        if(distPalo>=2) distPalo=2;
                         if(distPalo<=0) distPalo=0;
                     }
                 }
@@ -300,14 +297,12 @@ int main(int argc, char *argv[]) {
                     actualizarCam(x,y,z,angb,anga,rad);
                     break;
                 case SDLK_UP:
-                        distPalo -= 0.03;
-                        if(distPalo>=3) distPalo=3;
+                        distPalo -= 0.02;
                         if(distPalo<=0) distPalo=0;
                     break;
                 case SDLK_DOWN:
-                        distPalo += 0.03;
-                        if(distPalo>=3) distPalo=3;
-                        if(distPalo<=0) distPalo=0;
+                        distPalo += 0.02;
+                        if(distPalo>=2) distPalo=2;
                     break;
                 case SDLK_s:
                     rad-=.05;//factor de ajuste: 0,05
@@ -400,7 +395,7 @@ int main(int argc, char *argv[]) {
         }
         SDL_GL_SwapBuffers();
 
-        auto finTimer = chrono::steady_clock::now();
+        auto finTimer = std::chrono::steady_clock::now();
         std::chrono::duration<double> elapsed_seconds = finTimer - inicioTimer;
         Sleep(16.6667 - elapsed_seconds.count());
 //        std::this_thread::sleep_for(1);

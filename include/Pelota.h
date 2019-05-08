@@ -1,7 +1,7 @@
 #ifndef PELOTA_H
 #define PELOTA_H
 #include <vector>
-using namespace std;
+#include <string>
 
 class Pelota
 {
@@ -9,16 +9,16 @@ class Pelota
         Pelota(int id);
         virtual ~Pelota();
 
-        vector<double> getPos();
+        std::vector<double> getPos();
         void setPos(double x, double y);
 
-        vector<double> getLastPos();
+        std::vector<double> getLastPos();
         void setLastPos(double x, double y);
 
-        vector<double> getAngulos();
+        std::vector<double> getAngulos();
         void setAngulos(double x, double y);
 
-        vector<double> getVel();
+        std::vector<double> getVel();
         void setVel(double x, double y);
 
         int getUltimoChoque();
@@ -31,7 +31,7 @@ class Pelota
 
     private:
         int id;
-        vector<double> pos, lastPos, vel, angulos;
+        std::vector<double> pos, lastPos, vel, angulos;
         GLuint tex;
         int ultimoChoque;
 

@@ -5,18 +5,17 @@
 #include <iostream>
 #include <math.h>
 #include <string>
-
+#include <sstream>
 #define PI 3.14159265
 
-using namespace std;
 
 Pelota::Pelota(int i)
 {
     id = i;
-    pos=vector<double>(2);
-    vel=vector<double>(2);
-    lastPos=vector<double>(2);
-    angulos=vector<double>(2);
+    pos=std::vector<double>(2);
+    vel=std::vector<double>(2);
+    lastPos=std::vector<double>(2);
+    angulos=std::vector<double>(2);
     vel[0]=vel[1]=pos[0]=pos[1]=lastPos[0]=lastPos[1]=angulos[0]=angulos[1]=0;
     tex = 0;
     ultimoChoque = -1;
@@ -70,7 +69,7 @@ void Pelota::chequearBordes(){
 
 
 /* GETTERS Y SETTERS */
-vector<double> Pelota::getPos(){
+std::vector<double> Pelota::getPos(){
     return pos;
 }
 void Pelota::setPos(double x, double y){
@@ -78,7 +77,7 @@ void Pelota::setPos(double x, double y){
     pos[1] = y;
 }
 
-vector<double> Pelota::getLastPos(){
+std::vector<double> Pelota::getLastPos(){
     return lastPos;
 }
 void Pelota::setLastPos(double x, double y){
@@ -86,7 +85,7 @@ void Pelota::setLastPos(double x, double y){
     lastPos[1] = y;
 }
 
-vector<double> Pelota::getVel(){
+std::vector<double> Pelota::getVel(){
     return vel;
 }
 
@@ -144,7 +143,9 @@ void Pelota::drawHalfSphere(int lats, int longs, GLfloat r) {
 
  void Pelota::cargarTextura(){
      // CARGAR TEXTURA BOLA
-    string archivo = "pelotas/10.png";
+    std::stringstream str;
+    str << id;
+    std::string archivo = "tex/pelotas/" + str.str() + ".png";
 
     FREE_IMAGE_FORMAT fif = FreeImage_GetFIFFromFilename(archivo.c_str());
     FIBITMAP* bitmap = FreeImage_Load(fif, archivo.c_str());
