@@ -50,11 +50,13 @@ void Pelota::dibujarPelota(){
 void Pelota::actualizarPosYVel(){
     setLastPos(pos[0],pos[1]);
 
-    pos[0] = pos[0] + vel[0];
-    pos[1] = pos[1] + vel[1];
+    pos[0] += vel[0];
+    pos[1] += vel[1];
 
-    vel[0] = vel[0] * 0.99;
-    vel[1] = vel[1] * 0.99;
+    vel[0] *= 0.99;
+    vel[1] *= 0.99;
+    vel[0] -= ((vel[0] > 0) - (vel[0] < 0)) * 0.00003;
+    vel[1] -= ((vel[1] > 0) - (vel[1] < 0)) * 0.00003;
 
     if (vel[0] < 0.0001 and vel[0] > -0.0001) vel[0]=0;
     if (vel[1] < 0.0001 and vel[1] > -0.0001) vel[1]=0;

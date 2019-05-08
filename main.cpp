@@ -14,7 +14,7 @@
 
 enum TipoCamara {libre, palo, techo};
 
-void dibujarPalo(float angPalo, float distPalo, double blancaX, double blancaY){
+void dibujarPalo(float angPalo, float &distPalo, double blancaX, double blancaY){
     glPushMatrix();
     glTranslatef(blancaX,blancaY,0);
     glRotatef(angPalo,0,0,1);
@@ -77,6 +77,7 @@ void shoot(Pelota* blanca,float angPalo, float distPalo){
     double velx = cos((angPalo-90)*PI/180);
     double vely = sin((angPalo-90)*PI/180);
     blanca->setVel((velx*distPalo/2)/3,(vely*distPalo/2)/3);
+    distPalo = 0;
 }
 
 int main(int argc, char *argv[]) {
