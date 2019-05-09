@@ -37,7 +37,6 @@ int main(int argc, char *argv[]) {
         std::chrono::duration<double,std::micro> transcurrido = std::chrono::steady_clock::now() - inicio;
         while (transcurrido < std::chrono::duration<double,std::micro>(1000000/60)) {
             transcurrido = std::chrono::steady_clock::now() - inicio;
-            printf("%d   %d\n",transcurrido,std::chrono::duration<double,std::micro>(1000000/60));
         }
         //Sleep(16.6667 - elapsed_seconds.count());
         //std::this_thread::sleep_for(1);

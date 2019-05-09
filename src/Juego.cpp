@@ -5,36 +5,23 @@
 #include <math.h>
 
 #define PI 3.14159265
+#define techo 0
+#define palo 1
+#define libre 2
 
 Juego::Juego(){
+
     // PELOTAS
-    pelotas.push_back(new Pelota(0));
-    for (int i=1; i < 16; i++){
-        pelotas.push_back(new Pelota(i));
-        pelotas[i]->setVel(0,0);
+    posicionesIniciales();
+
+    for (int i=0; i<pelotas.size();i++){
+        std::vector<bool> aux;
+        colisiones.push_back(aux);
+        for (int j=0; j<pelotas.size();j++){
+            colisiones[i].push_back(false);
+        }
     }
-
-    pelotas[0]->setPos(2.5,2.5);
-    pelotas[1]->setPos(2.5,6.6392);
-    pelotas[2]->setPos(2.3,7.0696);
-    pelotas[3]->setPos(2.7,7.0696);
-    pelotas[4]->setPos(2.1,7.5);
-    pelotas[5]->setPos(2.5,7.5);
-    pelotas[6]->setPos(2.9,7.5);
-    pelotas[7]->setPos(1.9,7.9304);
-    pelotas[8]->setPos(2.3,7.9304);
-    pelotas[9]->setPos(2.7,7.9304);
-    pelotas[10]->setPos(3.1,7.9304);
-    pelotas[11]->setPos(1.7,8.3608);
-    pelotas[12]->setPos(2.1,8.3608);
-    pelotas[13]->setPos(2.5,8.3608);
-    pelotas[14]->setPos(2.9,8.3608);
-    pelotas[15]->setPos(3.3,8.3608);
-
-    pelotas[0]->setVel(0,0);
-
 }
-
 
 bool Juego::salir(){
 return fin;
@@ -53,9 +40,33 @@ void Juego::inicializar(){
     float pos[] = {0.0,0.0,0.0,1.0};
     glLightfv(GL_LIGHT0, GL_POSITION, pos);
 
-    bool res = loadObj("mod/pool.obj", vertices, uvs, normals,vertexIndices);
+    // modelo mesa
+    bool res = loadObj("mod/mesa.obj", vertices, uvs, normals,vertexIndices);
 
+    // textura mesa
+    std::string archivo = "tex/mesa.jpg";
 
+    FREE_IMAGE_FORMAT fif = FreeImage_GetFIFFromFilename(archivo.c_str());
+    FIBITMAP* bitmap = FreeImage_Load(fif, archivo.c_str());
+    bitmap = FreeImage_ConvertTo24Bits(bitmap);
+
+    int w = FreeImage_GetWidth(bitmap);
+    int h = FreeImage_GetHeight(bitmap);
+
+    void* datos = FreeImage_GetBits(bitmap);
+
+    glGenTextures(1, &texMesa);
+
+    glBindTexture(GL_TEXTURE_2D, texMesa);
+
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_BGR, GL_UNSIGNED_BYTE, datos);
 
 }
 
@@ -93,52 +104,30 @@ void Juego::mainLoop(){
     glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
     */
 
-    if (camara == libre)
-        gluLookAt(x+centrox,y+centroy,-z+centroz,centrox,centroy,centroz,0,1,0);
-    else if (camara == palo) {
-        gluLookAt(pelotas[0]->getPos()[0]+x,1,pelotas[0]->getPos()[1]-z,pelotas[0]->getPos()[0],0.5,pelotas[0]->getPos()[1],0,1,0);
-    } else {
-        gluLookAt(2.5,10,5,2.5,0,5,1,0,0);
+    if (camara == libre) {
+        //printf("LIBREEEEEE\n");
+        actualizarCam(anga,angb,rad);
+        gluLookAt(x+centrox,y+centroy,z+centroz,centrox,centroy,centroz,0,0,1);
+    }
+    if (camara == palo) {
+        //printf("PALOOOO\n");
+        actualizarCamaraPalo(anga);
+        gluLookAt(pelotas[0]->getPos()[0]+x,pelotas[0]->getPos()[1]+y,1,pelotas[0]->getPos()[0],pelotas[0]->getPos()[1],0.5,0,0,1);
+    }
+    if (camara == techo) {
+        //printf("TECHOOO\n");
+        gluLookAt(2.5,5,10,2.5,5,0,-1,0,0);
     }
 
-    glRotatef(90,1.0,0.0,0.0);   // angle, x-axis, y-axis, z-axis
+    if (camara==techo) printf("huehuehue\n");
+    if (camara==libre) printf("lalala\n");
+    if (camara==palo) printf("n_n\n");
 
-    if (texMesa==0) {
-
-    std::string archivo = "tex/pool.jpg";
-
-    FREE_IMAGE_FORMAT fif = FreeImage_GetFIFFromFilename(archivo.c_str());
-    FIBITMAP* bitmap = FreeImage_Load(fif, archivo.c_str());
-    bitmap = FreeImage_ConvertTo24Bits(bitmap);
-
-    int w = FreeImage_GetWidth(bitmap);
-    int h = FreeImage_GetHeight(bitmap);
-
-    void* datos = FreeImage_GetBits(bitmap);
-
-    glGenTextures(1, &texMesa);
-
-    glBindTexture(GL_TEXTURE_2D, texMesa);
-
-    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_BGR, GL_UNSIGNED_BYTE, datos);
-
-    delete datos;
-    }
-
-
+    // MESA
     glPushMatrix();
-//    glDisable(GL_TEXTURE_2D);
-    glTranslatef(2.2,5,4);
-    glRotatef(180,1,0,0);
-    glScalef(0.048,0.048,0.048);
-    //glColor3f(1,1,1);
+    glTranslatef(2.5,5,-0.2);
+    glScalef(0.113,0.1024,0.105);
+    glRotatef(90,1,0,0);
     glBindTexture(GL_TEXTURE_2D, texMesa);
     glBegin(GL_QUADS);
     for(int i =0;i< vertexIndices.size();i++){
@@ -147,12 +136,10 @@ void Juego::mainLoop(){
         glVertex3f(vertices[i][0],vertices[i][1],vertices[i][2]);
     }
     glEnd();
-//    glEnable(GL_TEXTURE_2D);
     glPopMatrix();
 
     glColor3f(1,1,1);
     movimientoPelotas = false;
-
     for (int i=0; i < pelotas.size(); i++){
         pelotas[i]->actualizarPosYVel();
         if (pelotas[i]->getVel()[0] != 0 || pelotas[i]->getVel()[1] != 0) movimientoPelotas = true;
@@ -161,31 +148,11 @@ void Juego::mainLoop(){
             chequearColision(i,j);
         pelotas[i]->dibujarPelota();
     }
+
     glDisable(GL_TEXTURE_2D);
     if (!movimientoPelotas && camara!=libre){
         dibujarPalo();
     }
-    // "MESA"
-    glTranslatef(0,0,0.2);
-    glColor3ub(34,139,34);
-    glNormal3f(0,1,0);
-    glBegin(GL_POLYGON);
-        glVertex3f(-0.2,-0.2,0);
-        glVertex3f(5.2,-0.2,0);
-        glVertex3f(5.2,10.2,0);
-        glVertex3f(-0.2,10.2,0);
-    glEnd();
-    glColor3ub(127,127,127);
-    glBegin(GL_POLYGON);
-        glVertex3f(-0.2,-0.2,2);
-        glVertex3f(5.2,-0.2,2);
-        glVertex3f(5.2,10.2,2);
-        glVertex3f(-0.2,10.2,2);
-    glEnd();
-
-
-    glPopMatrix();
-    glEnd();
 
     int xm,ym;
     SDL_GetMouseState(&xm, &ym);
@@ -211,18 +178,15 @@ void Juego::mainLoop(){
         case SDL_MOUSEMOTION:
             if (camara==libre){
                 if(moverCam){
-                    if (evento.motion.yrel<0 && angb < 80 )
-                        angb-=evento.motion.yrel*sens;//factor de ajuste: 0,4
-                    else if (evento.motion.yrel>=0 && angb > -80)
-                        angb-=evento.motion.yrel*sens;//factor de ajuste: 0,4
                     anga+=evento.motion.xrel*sens;//factor de ajuste: 0,4
-                    actualizarCam(angb,anga,rad);
+                    angb-=evento.motion.yrel*sens;//factor de ajuste: 0,4
+                    if (angb > 85) angb = 85;
+                    if (angb < -85) angb = -85;
                 }
             } else {
                 if(girarPalo){
                     angPalo += evento.motion.xrel*sens;
                     anga=angPalo;
-                    actualizarCam(angb,anga,rad);
                 } else {
                     distPalo += evento.motion.yrel*sens/3;
                     if(distPalo>=2) distPalo=2;
@@ -234,6 +198,7 @@ void Juego::mainLoop(){
             fin = true;
             break;
         case SDL_KEYDOWN:
+
             if (teclaApretada) {
                 contadorFrames++;
                 if (contadorFrames >= 10) teclaApretada=false;
@@ -243,48 +208,44 @@ void Juego::mainLoop(){
                     fin = true;
                     break;
                 case SDLK_LEFT:
-                    if (camara!=libre){
-                        angPalo+=1;
-                    }
                     anga += 1;
-                    actualizarCam(angb,anga,rad);
+                    if (camara!=libre) angPalo+=1;
                     break;
                 case SDLK_RIGHT:
-                    if (camara!=libre){
-                        angPalo-=1;
-                    }
                     anga -= 1;
-                    actualizarCam(angb,anga,rad);
+                    if (camara!=libre) angPalo-=1;
                     break;
                 case SDLK_UP:
+                    angb-=1;
+                    if (angb < -80) angb = -80;
                     distPalo -= 0.02;
                     if(distPalo<=0) distPalo=0;
                     break;
                 case SDLK_DOWN:
+                    angb+=1;
+                    if (angb > 80) angb = 80;
                     distPalo += 0.02;
                     if(distPalo>=2) distPalo=2;
                     break;
                 case SDLK_s:
                     rad-=.05;//factor de ajuste: 0,05
-                    actualizarCam(angb,anga,rad);
+                    if (rad < 0.5) rad = 0.5;
                     break;
                 case SDLK_w:
-                    if(rad<0)
-                        rad+=.05;//factor de ajuste: 0,05
-                    actualizarCam(angb,anga,rad);
+                    rad+=.05;//factor de ajuste: 0,05
+                    if (rad > 12) rad = 12;
                     break;
                 case SDLK_v:
                     if (!teclaApretada){
-                        if (camara==libre) camara=palo;
-                        else if (camara==palo) camara=techo;
-                        else camara=libre;
-
-                        if (camara == palo){
-                            anga=angPalo;
-                            angb=0;
-                            distPalo=0;
+                        camara = (camara+1) % 3;
+                        if (camara == libre) {
+                            anga=0;
+                            angb=35;
+                            rad=10;
                         }
-                        actualizarCam(angb,anga,rad);
+                        if (camara == palo) {
+                            anga=angPalo;
+                        }
                         apretarTecla();
                     }
                     break;
@@ -342,6 +303,13 @@ void Juego::mainLoop(){
                         apretarTecla();
                     }
                     break;
+                case SDLK_r:
+                    if (!teclaApretada){
+                        posicionesIniciales();
+                        apretarTecla();
+                    }
+                    break;
+
 
                 case SDLK_F9:
                     if (!teclaApretada){
@@ -371,7 +339,7 @@ void Juego::dibujarPalo(){
     glPushMatrix();
     glTranslatef(pelotas[0]->getPos()[0],pelotas[0]->getPos()[1],0);
     glRotatef(angPalo,0,0,1);
-    glRotatef(-5,1,0,0);
+    glRotatef(5,1,0,0);
     glBegin(GL_LINES);
         glVertex3f(0.05,0.4+distPalo,0);
         glVertex3f(0.05,5+distPalo,0);
@@ -399,21 +367,26 @@ void Juego::dibujarPalo(){
 
 
 void Juego::actualizarCam(float x_angle, float y_angle,float radius){
-    z = cos(y_angle*PI/180) * cos(x_angle*PI/180) * radius;
-    x = sin(y_angle*PI/180) * cos(x_angle*PI/180) * radius;
-    y = sin(x_angle*PI/180) * radius;
+    x = cos(x_angle*PI/180) * cos(y_angle*PI/180) * radius;
+    y = -sin(x_angle*PI/180) * cos(y_angle*PI/180) * radius;
+    z = sin(y_angle*PI/180) * radius;
 }
 
-
+void Juego::actualizarCamaraPalo(float x_angle){
+    x = cos((x_angle+90)*PI/180) * 4;
+    y = sin((x_angle+90)*PI/180) * 4;
+    z = 1;
+}
 
 void Juego::chequearColision(int i, int j){
-    if (!(pelotas[i]->getUltimoChoque() == j && pelotas[j]->getUltimoChoque() == i)) {
-        double dx = pelotas[i]->getPos()[0] - pelotas[j]->getPos()[0];
-        double dy = pelotas[i]->getPos()[1] - pelotas[j]->getPos()[1];
-        double dist = hypot(dx, dy);
-        if (dist < 0.4) {
+    double dx = pelotas[i]->getPos()[0] - pelotas[j]->getPos()[0];
+    double dy = pelotas[i]->getPos()[1] - pelotas[j]->getPos()[1];
+    double dist = hypot(dx, dy);
+    if (dist < 0.4) {
+        if ((!colisiones[i][j]) && ((pelotas[i]->getUltimoChoque()!=i) || (pelotas[j]->getUltimoChoque()!=i))){
             pelotas[i]->setUltimoChoque(j);
             pelotas[j]->setUltimoChoque(i);
+            colisiones[i][j]=true;
             std::vector<double> normal = {dx/dist, dy/dist};
             std::vector<double> tangente = {-normal[1], normal[0]};
             double vni = pelotas[i]->getVel()[0] * normal[0] + pelotas[i]->getVel()[1] * normal[1];
@@ -423,7 +396,7 @@ void Juego::chequearColision(int i, int j){
             pelotas[i]->setVel(normal[0]*vnj + tangente[0]*vti, normal[1]*vnj + tangente[1]*vti);
             pelotas[j]->setVel(normal[0]*vni + tangente[0]*vtj, normal[1]*vni + tangente[1]*vtj);
         }
-    }
+    } else colisiones[i][j]=false;
 }
 
 void Juego::shoot(){
@@ -431,6 +404,31 @@ void Juego::shoot(){
     double vely = sin((angPalo-90)*PI/180);
     pelotas[0]->setVel((velx*distPalo/2)/3,(vely*distPalo/2)/3);
     distPalo = 0;
+}
+
+void Juego::posicionesIniciales(){
+    pelotas.push_back(new Pelota(0));
+    for (int i=1; i < 16; i++){
+        pelotas.push_back(new Pelota(i));
+        pelotas[i]->setVel(0,0);
+    }
+
+    pelotas[0]->setPos(2.5,2.5);
+    pelotas[1]->setPos(2.5,6.6392);
+    pelotas[2]->setPos(2.3,7.0696);
+    pelotas[3]->setPos(2.71,7.0696);
+    pelotas[4]->setPos(2.09,7.5);
+    pelotas[5]->setPos(2.5,7.5);
+    pelotas[6]->setPos(2.91,7.5);
+    pelotas[7]->setPos(1.89,7.9304);
+    pelotas[8]->setPos(2.3,7.9304);
+    pelotas[9]->setPos(2.71,7.9304);
+    pelotas[10]->setPos(3.12,7.9304);
+    pelotas[11]->setPos(1.68,8.3608);
+    pelotas[12]->setPos(2.09,8.3608);
+    pelotas[13]->setPos(2.5,8.3608);
+    pelotas[14]->setPos(2.91,8.3608);
+    pelotas[15]->setPos(3.32,8.3608);
 }
 
 

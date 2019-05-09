@@ -36,7 +36,7 @@ void Pelota::dibujarPelota(){
     glPushMatrix();
 
     glTranslatef(pos[0],pos[1],0);
-    glRotatef(angulos[1],1,0,0);
+    glRotatef(-angulos[1],1,0,0);
     glRotatef(-angulos[0],0,1,0);
 
     //glEnable(GL_TEXTURE_2D);

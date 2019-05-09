@@ -7,8 +7,6 @@
 #include <../glm/glm/vec3.hpp>
 
 
-enum TipoCamara {libre, palo, techo};
-
 class Juego
 {
     public:
@@ -34,14 +32,14 @@ class Juego
         // CAMARA
         float anga=0;
         float angb=0;
-        float rad=-5;
+        float rad=5;
 
         float x=0;
         float y=0;
-        float z=rad;
+        float z=0;
         float centrox = 2.5;
-        float centroy = 1;
-        float centroz = 12;
+        float centroy = 5;
+        float centroz = 1;
 
         float angPalo=180;
         float distPalo=0;
@@ -51,13 +49,14 @@ class Juego
         bool moverCam=false;
         bool girarPalo=true;
 
-        TipoCamara camara = techo;
+        int camara = 0;// techo
 
         bool botonIzquierdoApretado=false;
 
         // PELOTAS
         bool movimientoPelotas;
         std::vector<Pelota*> pelotas;
+        std::vector<std::vector<bool>> colisiones;
 
         std::vector< glm::vec3 > vertices;
         std::vector< glm::vec2 > uvs;
@@ -67,8 +66,10 @@ class Juego
         GLuint texMesa=0;
 
         void shoot();
+        void posicionesIniciales();
         void chequearColision(int i, int j);
         void actualizarCam(float x_angle, float y_angle,float radius);
+        void actualizarCamaraPalo(float x_angle);
         void dibujarPalo();
         void apretarTecla();
         bool loadObj(const char *path,std::vector<glm::vec3> &out_vertices,std::vector<glm::vec2> &out_uvs,std::vector<glm::vec3> &out_normals,std::vector< unsigned int > &vertexIndices);
