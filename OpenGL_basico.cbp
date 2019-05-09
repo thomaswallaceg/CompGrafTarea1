@@ -51,9 +51,11 @@
 		</Linker>
 		<Unit filename="FreeImage.dll" />
 		<Unit filename="SDL.dll" />
-		<Unit filename="include/Pelota.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="src/Juego.cpp" />
+		<Unit filename="src/Juego.h" />
 		<Unit filename="src/Pelota.cpp" />
+		<Unit filename="src/Pelota.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />

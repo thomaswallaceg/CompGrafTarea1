@@ -1,11 +1,11 @@
 #include "SDL/SDL.h"
 #include "SDL/SDL_opengl.h"
 #include "FreeImage.h"
-#include "../include/Pelota.h"
+#include "Pelota.h"
 #include <iostream>
 #include <math.h>
-#include <string>
 #include <sstream>
+
 #define PI 3.14159265
 
 
@@ -39,10 +39,10 @@ void Pelota::dibujarPelota(){
     glRotatef(angulos[1],1,0,0);
     glRotatef(-angulos[0],0,1,0);
 
-    glEnable(GL_TEXTURE_2D);
+    //glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, tex);
 
-    drawHalfSphere(10, 10, 0.2);
+    drawHalfSphere(20, 20, 0.2);
 
     glPopMatrix();
 }
@@ -55,8 +55,8 @@ void Pelota::actualizarPosYVel(){
 
     vel[0] *= 0.99;
     vel[1] *= 0.99;
-    vel[0] -= ((vel[0] > 0) - (vel[0] < 0)) * 0.00003;
-    vel[1] -= ((vel[1] > 0) - (vel[1] < 0)) * 0.00003;
+    vel[0] -= ((vel[0] > 0) - (vel[0] < 0)) * 0.00002;
+    vel[1] -= ((vel[1] > 0) - (vel[1] < 0)) * 0.00002;
 
     if (vel[0] < 0.0001 and vel[0] > -0.0001) vel[0]=0;
     if (vel[1] < 0.0001 and vel[1] > -0.0001) vel[1]=0;
