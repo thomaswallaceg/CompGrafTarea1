@@ -27,7 +27,7 @@ class Pelota
 
         void actualizarPosYVel();
         void chequearBordes();
-        void dibujarPelota();
+        void dibujarPelota(bool pausa);
         void cargarTextura();
 
     private:

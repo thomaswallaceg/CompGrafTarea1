@@ -24,13 +24,15 @@ Pelota::Pelota(int i)
 Pelota::~Pelota(){}
 
 /* MOVIMIENTO */
-void Pelota::dibujarPelota(){
-    if (lastPos[0] != pos[0] || lastPos[1] != pos[1]){
+void Pelota::dibujarPelota(bool pausa){
+
+    if ((lastPos[0] != pos[0] || lastPos[1] != pos[1]) && !pausa){
         angulos[0] = angulos[0] + 900/3.141592 * (pos[0]-lastPos[0]);
         angulos[1] = angulos[1] + 900/3.141592 * (pos[1]-lastPos[1]);
         while (angulos[0] > 360) angulos[0] = angulos[0] - 360;
         while (angulos[1] > 360) angulos[1] = angulos[1] - 360;
     }
+
     if (tex==0) cargarTextura();
 
     glPushMatrix();

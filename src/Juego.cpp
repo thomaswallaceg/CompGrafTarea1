@@ -12,7 +12,7 @@
 Juego::Juego(){
 
     // PELOTAS
-    posicionesIniciales();
+    for (int i=0; i < 16; i++) pelotas.push_back(new Pelota(i));
 
     for (int i=0; i<pelotas.size();i++){
         std::vector<bool> aux;
@@ -21,6 +21,9 @@ Juego::Juego(){
             colisiones[i].push_back(false);
         }
     }
+
+    posicionesIniciales();
+
 }
 
 bool Juego::salir(){
@@ -139,18 +142,22 @@ void Juego::mainLoop(){
     glPopMatrix();
 
     glColor3f(1,1,1);
+
+
     movimientoPelotas = false;
     for (int i=0; i < pelotas.size(); i++){
-        pelotas[i]->actualizarPosYVel();
-        if (pelotas[i]->getVel()[0] != 0 || pelotas[i]->getVel()[1] != 0) movimientoPelotas = true;
-        pelotas[i]->chequearBordes();
-        for (int j=i+1; j < pelotas.size(); j++)
-            chequearColision(i,j);
-        pelotas[i]->dibujarPelota();
+        if (!pausa) {
+            pelotas[i]->actualizarPosYVel();
+            if (pelotas[i]->getVel()[0] != 0 || pelotas[i]->getVel()[1] != 0) movimientoPelotas = true;
+            pelotas[i]->chequearBordes();
+            for (int j=i+1; j < pelotas.size(); j++)
+                chequearColision(i,j);
+        }
+        pelotas[i]->dibujarPelota(pausa);
     }
 
     glDisable(GL_TEXTURE_2D);
-    if (!movimientoPelotas && camara!=libre){
+    if (!movimientoPelotas && !pausa && camara!=libre){
         dibujarPalo();
     }
 
@@ -201,7 +208,7 @@ void Juego::mainLoop(){
 
             if (teclaApretada) {
                 contadorFrames++;
-                if (contadorFrames >= 10) teclaApretada=false;
+                if (contadorFrames >= 7) teclaApretada=false;
             }
             switch(evento.key.keysym.sym){
                 case SDLK_q:
@@ -228,12 +235,12 @@ void Juego::mainLoop(){
                     if(distPalo>=2) distPalo=2;
                     break;
                 case SDLK_s:
-                    rad-=.05;//factor de ajuste: 0,05
-                    if (rad < 0.5) rad = 0.5;
-                    break;
-                case SDLK_w:
                     rad+=.05;//factor de ajuste: 0,05
                     if (rad > 12) rad = 12;
+                    break;
+                case SDLK_w:
+                    rad-=.05;//factor de ajuste: 0,05
+                    if (rad < 0.5) rad = 0.5;
                     break;
                 case SDLK_v:
                     if (!teclaApretada){
@@ -263,38 +270,38 @@ void Juego::mainLoop(){
                     break;
                 case SDLK_e:
                     if (camara==libre && moverCam) {
-                        centroy+=0.1;
-                        if (centroy > 5) centroy=5;
+                        centroz+=0.1;
+                        if (centroz > 10) centroz=10;
                     }
                     break;
                 case SDLK_d:
                     if (camara==libre && moverCam) {
-                        centroy-=0.1;
-                        if (centroy < 0) centroy=0;
+                        centroz-=0.1;
+                        if (centroz < 0.5) centroz=0.5;
                     }
                     break;
                 case SDLK_l:
                     if (camara==libre && moverCam) {
-                        centroz+=0.1;
-                        if (centroz > 13) centroz=13;
+                        centroy+=0.1;
+                        if (centroy > 13) centroy=13;
                     }
                     break;
                 case SDLK_j:
                     if (camara==libre && moverCam) {
-                        centroz-=0.1;
-                        if (centroz < -3) centroz=-3;
+                        centroy-=0.1;
+                        if (centroy < -3) centroy=-3;
                     }
                     break;
                 case SDLK_i:
                     if (camara==libre && moverCam) {
-                        centrox+=0.1;
-                        if (centrox > 8) centrox=8;
+                        centrox-=0.1;
+                        if (centrox < -3) centrox=-3;
                     }
                     break;
                 case SDLK_k:
                     if (camara==libre && moverCam) {
-                        centrox-=0.1;
-                        if (centrox < -3) centrox=-3;
+                        centrox+=0.1;
+                        if (centrox > 8) centrox=8;
                     }
                     break;
                 case SDLK_p:
@@ -407,28 +414,42 @@ void Juego::shoot(){
 }
 
 void Juego::posicionesIniciales(){
-    pelotas.push_back(new Pelota(0));
-    for (int i=1; i < 16; i++){
-        pelotas.push_back(new Pelota(i));
+    for (int i=0; i < 16; i++){
         pelotas[i]->setVel(0,0);
+        for (int j=0; j < 16;j++) colisiones[i][j]=false;
     }
 
-    pelotas[0]->setPos(2.5,2.5);
-    pelotas[1]->setPos(2.5,6.6392);
-    pelotas[2]->setPos(2.3,7.0696);
-    pelotas[3]->setPos(2.71,7.0696);
-    pelotas[4]->setPos(2.09,7.5);
-    pelotas[5]->setPos(2.5,7.5);
-    pelotas[6]->setPos(2.91,7.5);
-    pelotas[7]->setPos(1.89,7.9304);
-    pelotas[8]->setPos(2.3,7.9304);
-    pelotas[9]->setPos(2.71,7.9304);
-    pelotas[10]->setPos(3.12,7.9304);
-    pelotas[11]->setPos(1.68,8.3608);
-    pelotas[12]->setPos(2.09,8.3608);
-    pelotas[13]->setPos(2.5,8.3608);
-    pelotas[14]->setPos(2.91,8.3608);
-    pelotas[15]->setPos(3.32,8.3608);
+    double centroTximpar = 2.5;
+    double centroTy = 7.5;
+    double espacioy = 0.355;
+    double espaciox = 0.41;
+    double mult = 1.3;
+
+    double centroTxpar = centroTximpar + (espaciox*mult)/2;
+
+    pelotas[0]->setPos(centroTximpar,2.5);
+
+
+
+    pelotas[1] ->setPos(centroTximpar                  , centroTy-2*mult*espacioy);
+
+    pelotas[9] ->setPos(centroTxpar                    , centroTy-mult*espacioy);
+    pelotas[10] ->setPos(centroTxpar-mult*espaciox      , centroTy-mult*espacioy);
+
+    pelotas[2] ->setPos(centroTximpar+mult*espaciox    , centroTy);
+    pelotas[8] ->setPos(centroTximpar                  , centroTy);
+    pelotas[3] ->setPos(centroTximpar-mult*espaciox    , centroTy);
+
+    pelotas[11] ->setPos(centroTxpar+mult*espaciox      , centroTy+mult*espacioy);
+    pelotas[7] ->setPos(centroTxpar                    , centroTy+mult*espacioy);
+    pelotas[15] ->setPos(centroTxpar-mult*espaciox      , centroTy+mult*espacioy);
+    pelotas[12]->setPos(centroTxpar-2*mult*espaciox    , centroTy+mult*espacioy);
+
+    pelotas[4]->setPos(centroTximpar+2*mult*espaciox  , centroTy+2*mult*espacioy);
+    pelotas[13]->setPos(centroTximpar+mult*espaciox    , centroTy+2*mult*espacioy);
+    pelotas[5]->setPos(centroTximpar                  , centroTy+2*mult*espacioy);
+    pelotas[14]->setPos(centroTximpar-mult*espaciox    , centroTy+2*mult*espacioy);
+    pelotas[6]->setPos(centroTximpar-2*mult*espaciox  , centroTy+2*mult*espacioy);
 }
 
 
