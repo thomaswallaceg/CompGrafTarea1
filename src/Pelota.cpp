@@ -65,15 +65,21 @@ void Pelota::actualizarPosYVel(){
 
 void Pelota::chequearBordes(){
     if (pos[0] <= radio && vel[0] < 0) {
-        if (pos[1] < 5.32 && pos[1] > 4.68){
-            //chequearPunta(4);
-        }
+        if (pos[1] < 5.32 && pos[1] > 4.68) metida=true;
         vel[0]=-vel[0];
         ultimoChoque = -1;
     }
-    if (pos[0] >= 5-radio && vel[0] > 0) {vel[0]=-vel[0]; ultimoChoque = -1;}
+    if (pos[0] >= 5-radio && vel[0] > 0) {
+        if (pos[1] < 5.32 && pos[1] > 4.68) metida=true;
+        vel[0]=-vel[0];
+        ultimoChoque = -1;
+    }
     if (pos[1] <= radio && vel[1] < 0) {vel[1]=-vel[1]; ultimoChoque = -1;}
     if (pos[1] >= 10-radio && vel[1] > 0) {vel[1]=-vel[1]; ultimoChoque = -1;}
+
+    if ((pos[0] <= radio && pos[1] <= radio)   || (pos[0] <= radio && pos[1] >= 10-radio) ||
+        (pos[0] >= 5-radio && pos[1] <= radio) || (pos[0] >= 5-radio && pos[1] >= 10-radio))
+            metida = true;
 }
 
 
@@ -109,6 +115,23 @@ int Pelota::getUltimoChoque(){
 
 void Pelota::setUltimoChoque(int i){
     ultimoChoque = i;
+}
+
+std::vector<double> Pelota::getAngulos(){
+    return angulos;
+}
+
+void Pelota::setAngulos(double x, double y){
+    angulos[0] = x;
+    angulos[1] = y;
+}
+
+bool Pelota::getMetida(){
+    return metida;
+}
+
+void Pelota::setMetida(bool met){
+    metida = met;
 }
 
 

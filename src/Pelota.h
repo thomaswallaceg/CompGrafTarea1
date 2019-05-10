@@ -25,17 +25,21 @@ class Pelota
         int getUltimoChoque();
         void setUltimoChoque(int i);
 
+        bool getMetida();
+        void setMetida(bool met);
+
         void actualizarPosYVel();
         void chequearBordes();
         void dibujarPelota(bool pausa);
         void cargarTextura();
 
     private:
+        bool metida = false;
         float radio;
         int id;
         std::vector<double> pos, lastPos, vel, angulos;
         GLuint tex;
-        int ultimoChoque;
+        int ultimoChoque = -1;
 
         void drawHalfSphere(int lats, int longs, GLfloat r);
 };

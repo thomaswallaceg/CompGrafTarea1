@@ -17,8 +17,6 @@ class Juego
         bool salir();
 
     private:
-
-        bool fin=false;
         SDL_Event evento;
 
             // AJUSTES
@@ -28,30 +26,26 @@ class Juego
         bool mostrarTexturas = true;
         bool facetado = false;
 
-        int contadorFrames = 0;
-        bool teclaApretada = false;
+        bool fin=false;
 
         // CAMARA
-        float anga=0;
-        float angb=0;
-        float rad=5;
+        int camara = 0;// techo
+        float anga=180; // Ángulo horizontal
+        float angb=0; // Ángulo vertical
+        float rad=5; // Radio
+        float x=0; // Posición cámara libre
+        float y=0; // Posición cámara libre
+        float z=0; // Posición cámara libre
+        float centrox = 2.5; // Centro cámara libre
+        float centroy = 5; // Posición cámara libre
+        float centroz = 1; // Posición cámara libre
+        float sens = 0.4; // Sensibilidad
+        bool mouseCam=false;
 
-        float x=0;
-        float y=0;
-        float z=0;
-        float centrox = 2.5;
-        float centroy = 5;
-        float centroz = 1;
-
+        // PALO
         float angPalo=180;
         float distPalo=0;
-
-        float sens = 0.4;
-
-        bool moverCam=false;
         bool girarPalo=true;
-
-        int camara = 0;// techo
 
         bool botonIzquierdoApretado=false;
 
@@ -61,26 +55,28 @@ class Juego
         std::vector<Pelota*> pelotas;
         std::vector<std::vector<bool>> colisiones;
 
-        std::vector< glm::vec3 > vertices;
-        std::vector< glm::vec2 > uvs;
-        std::vector< glm::vec3 > normals;
-        std::vector<unsigned int> vertexIndices;
+        std::vector< glm::vec3 > verticesMesa;
+        std::vector< glm::vec2 > uvsMesa;
+        std::vector< glm::vec3 > normalesMesa;
+
         std::vector< glm::vec3 > verticesPalo;
         std::vector< glm::vec2 > uvsPalo;
-        std::vector< glm::vec3 > normalsPalo;
-        std::vector<unsigned int> vertexIndicesPalo;
+        std::vector< glm::vec3 > normalesPalo;
 
         GLuint texMesa=0;
         GLuint texPalo=0;
 
+        void viewOrtho();
+        void viewPerspective();
         void shoot();
+        void procesarEntrada();
         void posicionesIniciales();
         void chequearColision(int i, int j);
-        void actualizarCam(float x_angle, float y_angle,float radius);
+        void actualizarCamaraLibre(float x_angle, float y_angle,float radius);
         void actualizarCamaraPalo(float x_angle);
         void dibujarPalo();
         void apretarTecla();
-        bool loadObj(const char *path,std::vector<glm::vec3> &out_vertices,std::vector<glm::vec2> &out_uvs,std::vector<glm::vec3> &out_normals,std::vector< unsigned int > &vertexIndices);
+        bool loadObj(const char *path,std::vector<glm::vec3> &out_vertices,std::vector<glm::vec2> &out_uvs,std::vector<glm::vec3> &out_normals);
         void cargarText(GLuint &texMesa,std::string archivo);
-        void dibujarObj(GLuint text,float escalaX,float escalaY,float escalaZ,float translX,float translY,float translZ,std::vector<glm::vec3> vertices,std::vector<glm::vec2> uvs,std::vector<glm::vec3> normals,std::vector<unsigned int> vertexIndices,float angulo,bool alrevez);
+        void dibujarObj(GLuint text,std::vector<glm::vec3> vertices,std::vector<glm::vec2> uvs,std::vector<glm::vec3> normals);
 };

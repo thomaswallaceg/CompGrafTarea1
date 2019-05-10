@@ -41,12 +41,9 @@ void Juego::inicializar(){
     glMatrixMode(GL_MODELVIEW);
     glEnable(GL_NORMALIZE);
 
-    //float pos[] = {0.0,0.0,0.0,1.0};
-    //glLightfv(GL_LIGHT0, GL_POSITION, pos);
-
     // modelo mesa
-    bool res = loadObj("mod/mesa.obj", vertices, uvs, normals,vertexIndices);
-    bool res2 = loadObj("mod/poolCue.obj",verticesPalo,uvsPalo,normalsPalo,vertexIndicesPalo);
+    bool res = loadObj("mod/mesa.obj", verticesMesa, uvsMesa, normalesMesa);
+    bool res2 = loadObj("mod/poolCue.obj",verticesPalo,uvsPalo,normalesPalo);
 
     // textura mesa
     std::string archivoMesa = "tex/mesaAzul.png";
@@ -86,14 +83,10 @@ void Juego::mainLoop(){
 
     glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
-
-
     glColor3f(1,1,1);
 
-
-
     if (camara == libre) {
-        actualizarCam(anga,angb,rad);
+        actualizarCamaraLibre(anga,angb,rad);
         gluLookAt(x+centrox,y+centroy,z+centroz,centrox,centroy,centroz,0,0,1);
     }
     if (camara == palo) {
@@ -104,8 +97,16 @@ void Juego::mainLoop(){
         gluLookAt(2.5,5,10,2.5,5,0,-1,0,0);
     }
 
-    dibujarObj(texMesa,0.1128,0.1022,0.105,2.5,5,-radio,vertices,uvs,normals,vertexIndices,90,false);
-
+    //MESA
+    glPushMatrix();
+    glTranslatef(2.5,5,-radio);
+    glScalef(0.1125,0.1022,0.105);
+    glRotatef(90,1,0,0);
+    glMateriali(GL_FRONT_AND_BACK, GL_SPECULAR, 0);
+    glMaterialf(GL_FRONT_AND_BACK, GL_DIFFUSE, 30);
+    glMaterialf(GL_FRONT_AND_BACK, GL_AMBIENT, 100);
+    dibujarObj(texMesa,verticesMesa,uvsMesa,normalesMesa);
+    glPopMatrix();
 
     glBegin(GL_LINES);
         glVertex3f(-2,9.6,0);
@@ -120,207 +121,66 @@ void Juego::mainLoop(){
     glMaterialf(GL_FRONT_AND_BACK, GL_DIFFUSE, 70);
     glMaterialf(GL_FRONT_AND_BACK, GL_AMBIENT, 50);
 
+    if (pelotas[0]->getMetida() && !movimientoPelotas){
+        pelotas[0]->setMetida(false);
+        pelotas[0]->setVel(0,0);
+        pelotas[0]->setPos(2.5,2.5);
+        pelotas[0]->setUltimoChoque(-1);
+        pelotas[0]->setAngulos(0,0);
+        pelotas[0]->setLastPos(2.5,2.5);
+    }
+
     movimientoPelotas = false;
     for (int i=0; i < pelotas.size(); i++){
-        if (!pausa) {
-            pelotas[i]->actualizarPosYVel();
-            if (pelotas[i]->getVel()[0] != 0 || pelotas[i]->getVel()[1] != 0) movimientoPelotas = true;
-            pelotas[i]->chequearBordes();
-            for (int j=i+1; j < pelotas.size(); j++)
-                chequearColision(i,j);
+        if (!pelotas[0]->getMetida()){
+            if (!pausa) {
+                pelotas[i]->actualizarPosYVel();
+                if (pelotas[i]->getVel()[0] != 0 || pelotas[i]->getVel()[1] != 0) movimientoPelotas = true;
+                pelotas[i]->chequearBordes();
+                for (int j=i+1; j < pelotas.size(); j++)
+                    chequearColision(i,j);
+            }
+            pelotas[i]->dibujarPelota(pausa);
+        } else {
+            for (int k=0; k<pelotas.size(); k++){
+                colisiones[i][k]=false;
+                colisiones[k][i]=false;
+            }
         }
-        pelotas[i]->dibujarPelota(pausa);
     }
 
+    //PALO
     if (!movimientoPelotas && !pausa && camara!=libre){
-        dibujarObj(texPalo,0.035,0.035,0.035,pelotas[0]->getPos()[0],pelotas[0]->getPos()[1]-5.5-distPalo,0.4,verticesPalo,uvsPalo,normalsPalo,vertexIndicesPalo,-270,true);
+        glPushMatrix();
+        glTranslatef(pelotas[0]->getPos()[0],pelotas[0]->getPos()[1],0);
+        glRotatef(angPalo+180,0,0,1);
+        glRotatef(-5,1,0,0);
+        glTranslatef(0,-radio-distPalo,0);
+        glScalef(0.04,0.04,0.04);
+        glRotatef(-270,1,0,0);
+        glMateriali(GL_FRONT_AND_BACK, GL_SPECULAR, 0);
+        glMaterialf(GL_FRONT_AND_BACK, GL_DIFFUSE, 30);
+        glMaterialf(GL_FRONT_AND_BACK, GL_AMBIENT, 100);
+        dibujarObj(texPalo,verticesPalo,uvsPalo,normalesPalo);
+        glPopMatrix();
     }
+
+    // HUD
+    viewOrtho();
+    /*
+    glBegin(GL_TRIANGLES);
+        glVertex2f(0,0);
+        glVertex2f(0,1280);
+        glVertex2f(720,0);
+    glEnd();
+    */
+    viewPerspective();
 
     glDisable(GL_TEXTURE_2D);
-    int xm,ym;
-    SDL_GetMouseState(&xm, &ym);
-    while(SDL_PollEvent(&evento)){
-        switch(evento.type){
 
-        case SDL_MOUSEBUTTONDOWN:
-            if(SDL_GetMouseState(NULL, NULL)&SDL_BUTTON(SDL_BUTTON_LEFT)){
-                girarPalo=false;
-                botonIzquierdoApretado=true;
-            }
-            break;
-        case SDL_MOUSEBUTTONUP:
-            if (camara!=libre){
-                if (botonIzquierdoApretado){
-                    girarPalo=true;
-                    botonIzquierdoApretado=false;
-                    if (!movimientoPelotas) shoot();
-                    distPalo=0;
-                }
-            }
-            break;
-        case SDL_MOUSEMOTION:
-            if (camara==libre){
-                if(moverCam){
-                    anga+=evento.motion.xrel*sens;//factor de ajuste: 0,4
-                    angb-=evento.motion.yrel*sens;//factor de ajuste: 0,4
-                    if (angb > 85) angb = 85;
-                    if (angb < -85) angb = -85;
-                }
-            } else {
-                if(girarPalo){
-                    angPalo += evento.motion.xrel*sens;
-                    anga=angPalo;
-                } else {
-                    distPalo += evento.motion.yrel*sens/3;
-                    if(distPalo>=2) distPalo=2;
-                    if(distPalo<=0) distPalo=0;
-                }
-            }
-            break;
-        case SDL_QUIT:
-            fin = true;
-            break;
-        case SDL_KEYDOWN:
+    procesarEntrada();
 
-            if (teclaApretada) {
-                contadorFrames++;
-                if (contadorFrames >= 7) teclaApretada=false;
-            }
-            switch(evento.key.keysym.sym){
-                case SDLK_q:
-                    fin = true;
-                    break;
-                case SDLK_LEFT:
-                    anga += 1;
-                    if (camara!=libre) angPalo+=1;
-                    break;
-                case SDLK_RIGHT:
-                    anga -= 1;
-                    if (camara!=libre) angPalo-=1;
-                    break;
-                case SDLK_UP:
-                    angb-=1;
-                    if (angb < -80) angb = -80;
-                    distPalo -= 0.02;
-                    if(distPalo<=0) distPalo=0;
-                    break;
-                case SDLK_DOWN:
-                    angb+=1;
-                    if (angb > 80) angb = 80;
-                    distPalo += 0.02;
-                    if(distPalo>=2) distPalo=2;
-                    break;
-                case SDLK_s:
-                    rad+=.05;//factor de ajuste: 0,05
-                    if (rad > 12) rad = 12;
-                    break;
-                case SDLK_w:
-                    rad-=.05;//factor de ajuste: 0,05
-                    if (rad < 0.5) rad = 0.5;
-                    break;
-                case SDLK_v:
-                    if (!teclaApretada){
-                        camara = (camara+1) % 3;
-                        if (camara == libre) {
-                            anga=0;
-                            angb=35;
-                            rad=10;
-                        }
-                        if (camara == palo) {
-                            anga=angPalo;
-                        }
-                        apretarTecla();
-                    }
-                    break;
-                case SDLK_SPACE:
-                    if (camara!=libre and !movimientoPelotas){
-                        shoot();
-                        distPalo=0;
-                    }
-                    break;
-                case SDLK_b:
-                    if (!teclaApretada){
-                        moverCam=!moverCam;
-                        apretarTecla();
-                    }
-                    break;
-                case SDLK_e:
-                    if (camara==libre && moverCam) {
-                        centroz+=0.1;
-                        if (centroz > 10) centroz=10;
-                    }
-                    break;
-                case SDLK_d:
-                    if (camara==libre && moverCam) {
-                        centroz-=0.1;
-                        if (centroz < 0.5) centroz=0.5;
-                    }
-                    break;
-                case SDLK_l:
-                    if (camara==libre && moverCam) {
-                        centroy+=0.1;
-                        if (centroy > 13) centroy=13;
-                    }
-                    break;
-                case SDLK_j:
-                    if (camara==libre && moverCam) {
-                        centroy-=0.1;
-                        if (centroy < -3) centroy=-3;
-                    }
-                    break;
-                case SDLK_i:
-                    if (camara==libre && moverCam) {
-                        centrox-=0.1;
-                        if (centrox < -3) centrox=-3;
-                    }
-                    break;
-                case SDLK_k:
-                    if (camara==libre && moverCam) {
-                        centrox+=0.1;
-                        if (centrox > 8) centrox=8;
-                    }
-                    break;
-                case SDLK_p:
-                    if (!teclaApretada){
-                        pausa=!pausa;
-                        apretarTecla();
-                    }
-                    break;
-                case SDLK_r:
-                    if (!teclaApretada){
-                        posicionesIniciales();
-                        apretarTecla();
-                    }
-                    break;
-
-
-                case SDLK_F9:
-                    if (!teclaApretada){
-                        mostrarTexturas = !mostrarTexturas;
-                        apretarTecla();
-                    }
-                    break;
-                case SDLK_F10:
-                    if (!teclaApretada){
-                        wireframe = !wireframe;
-                        apretarTecla();
-                    }
-                case SDLK_F11:
-                    if (!teclaApretada){
-                        facetado = !facetado;
-                        apretarTecla();
-                    }
-                    break;
-                }
-                break;
-        }
-    }
     SDL_GL_SwapBuffers();
-}
-
-void Juego::apretarTecla(){
-    teclaApretada=true;
-    contadorFrames=0;
 }
 
 void Juego::dibujarPalo(){
@@ -352,9 +212,7 @@ void Juego::dibujarPalo(){
     glPopMatrix();
  }
 
-
-
-void Juego::actualizarCam(float x_angle, float y_angle,float radius){
+void Juego::actualizarCamaraLibre(float x_angle, float y_angle,float radius){
     x = cos(x_angle*PI/180) * cos(y_angle*PI/180) * radius;
     y = -sin(x_angle*PI/180) * cos(y_angle*PI/180) * radius;
     z = sin(y_angle*PI/180) * radius;
@@ -367,24 +225,26 @@ void Juego::actualizarCamaraPalo(float x_angle){
 }
 
 void Juego::chequearColision(int i, int j){
-    double dx = pelotas[i]->getPos()[0] - pelotas[j]->getPos()[0];
-    double dy = pelotas[i]->getPos()[1] - pelotas[j]->getPos()[1];
-    double dist = hypot(dx, dy);
-    if (dist < 2*radio) {
-        if ((!colisiones[i][j]) && ((pelotas[i]->getUltimoChoque()!=i) || (pelotas[j]->getUltimoChoque()!=i))){
-            pelotas[i]->setUltimoChoque(j);
-            pelotas[j]->setUltimoChoque(i);
-            colisiones[i][j]=true;
-            std::vector<double> normal = {dx/dist, dy/dist};
-            std::vector<double> tangente = {-normal[1], normal[0]};
-            double vni = pelotas[i]->getVel()[0] * normal[0] + pelotas[i]->getVel()[1] * normal[1];
-            double vnj = pelotas[j]->getVel()[0] * normal[0] + pelotas[j]->getVel()[1] * normal[1];
-            double vti = pelotas[i]->getVel()[0] * tangente[0] + pelotas[i]->getVel()[1] * tangente[1];
-            double vtj = pelotas[j]->getVel()[0] * tangente[0] + pelotas[j]->getVel()[1] * tangente[1];
-            pelotas[i]->setVel(normal[0]*vnj + tangente[0]*vti, normal[1]*vnj + tangente[1]*vti);
-            pelotas[j]->setVel(normal[0]*vni + tangente[0]*vtj, normal[1]*vni + tangente[1]*vtj);
-        }
-    } else colisiones[i][j]=false;
+    if (!pelotas[i]->getMetida() && !pelotas[j]->getMetida()){
+        double dx = pelotas[i]->getPos()[0] - pelotas[j]->getPos()[0];
+        double dy = pelotas[i]->getPos()[1] - pelotas[j]->getPos()[1];
+        double dist = hypot(dx, dy);
+        if (dist < 2*radio) {
+            if ((!colisiones[i][j]) && ((pelotas[i]->getUltimoChoque()!=i) || (pelotas[j]->getUltimoChoque()!=i))){
+                pelotas[i]->setUltimoChoque(j);
+                pelotas[j]->setUltimoChoque(i);
+                colisiones[i][j]=true;
+                std::vector<double> normal = {dx/dist, dy/dist};
+                std::vector<double> tangente = {-normal[1], normal[0]};
+                double vni = pelotas[i]->getVel()[0] * normal[0] + pelotas[i]->getVel()[1] * normal[1];
+                double vnj = pelotas[j]->getVel()[0] * normal[0] + pelotas[j]->getVel()[1] * normal[1];
+                double vti = pelotas[i]->getVel()[0] * tangente[0] + pelotas[i]->getVel()[1] * tangente[1];
+                double vtj = pelotas[j]->getVel()[0] * tangente[0] + pelotas[j]->getVel()[1] * tangente[1];
+                pelotas[i]->setVel(normal[0]*vnj + tangente[0]*vti, normal[1]*vnj + tangente[1]*vti);
+                pelotas[j]->setVel(normal[0]*vni + tangente[0]*vtj, normal[1]*vni + tangente[1]*vtj);
+            }
+        } else colisiones[i][j]=false;
+    }
 }
 
 void Juego::shoot(){
@@ -392,6 +252,29 @@ void Juego::shoot(){
     double vely = sin((angPalo-90)*PI/180);
     pelotas[0]->setVel((velx*distPalo/2)/3,(vely*distPalo/2)/3);
     distPalo = 0;
+}
+
+void Juego::viewOrtho()	{
+    glDisable(GL_DEPTH_TEST);
+    glDepthMask(GL_FALSE);
+	glMatrixMode(GL_PROJECTION);
+	glDisable(GL_LIGHTING);
+	glPushMatrix();
+	glLoadIdentity();
+	glOrtho( 0, 720, 0 , 1280, -1, 1 );
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glLoadIdentity();
+}
+
+void Juego::viewPerspective(){
+	glMatrixMode( GL_PROJECTION );
+	glPopMatrix();
+	glMatrixMode( GL_MODELVIEW );
+	glPopMatrix();
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_LIGHTING);
+    glDepthMask(GL_TRUE);
 }
 
 void Juego::posicionesIniciales(){
@@ -408,34 +291,204 @@ void Juego::posicionesIniciales(){
 
     double centroTxpar = centroTximpar + (espaciox*mult)/2;
 
-    pelotas[0]->setPos(2.5,5);
-
-
+    pelotas[0]->setPos(2.5,2.5);
 
     pelotas[1] ->setPos(centroTximpar                  , centroTy-2*mult*espacioy);
 
     pelotas[9] ->setPos(centroTxpar                    , centroTy-mult*espacioy);
-    pelotas[10] ->setPos(centroTxpar-mult*espaciox      , centroTy-mult*espacioy);
+    pelotas[10] ->setPos(centroTxpar-mult*espaciox     , centroTy-mult*espacioy);
 
     pelotas[2] ->setPos(centroTximpar+mult*espaciox    , centroTy);
     pelotas[8] ->setPos(centroTximpar                  , centroTy);
     pelotas[3] ->setPos(centroTximpar-mult*espaciox    , centroTy);
 
-    pelotas[11] ->setPos(centroTxpar+mult*espaciox      , centroTy+mult*espacioy);
+    pelotas[11] ->setPos(centroTxpar+mult*espaciox     , centroTy+mult*espacioy);
     pelotas[7] ->setPos(centroTxpar                    , centroTy+mult*espacioy);
-    pelotas[15] ->setPos(centroTxpar-mult*espaciox      , centroTy+mult*espacioy);
+    pelotas[15] ->setPos(centroTxpar-mult*espaciox     , centroTy+mult*espacioy);
     pelotas[12]->setPos(centroTxpar-2*mult*espaciox    , centroTy+mult*espacioy);
 
-    pelotas[4]->setPos(centroTximpar+2*mult*espaciox  , centroTy+2*mult*espacioy);
+    pelotas[4]->setPos(centroTximpar+2*mult*espaciox   , centroTy+2*mult*espacioy);
     pelotas[13]->setPos(centroTximpar+mult*espaciox    , centroTy+2*mult*espacioy);
-    pelotas[5]->setPos(centroTximpar                  , centroTy+2*mult*espacioy);
+    pelotas[5]->setPos(centroTximpar                   , centroTy+2*mult*espacioy);
     pelotas[14]->setPos(centroTximpar-mult*espaciox    , centroTy+2*mult*espacioy);
-    pelotas[6]->setPos(centroTximpar-2*mult*espaciox  , centroTy+2*mult*espacioy);
+    pelotas[6]->setPos(centroTximpar-2*mult*espaciox   , centroTy+2*mult*espacioy);
+}
+
+void Juego::procesarEntrada(){
+    int xm,ym;
+    SDL_GetMouseState(&xm, &ym);
+    while(SDL_PollEvent(&evento)){
+        switch(evento.type){
+            case SDL_MOUSEBUTTONDOWN:
+                if(mouseCam){
+                    if(SDL_GetMouseState(NULL, NULL)&SDL_BUTTON(SDL_BUTTON_LEFT)){
+                        girarPalo=false;
+                        botonIzquierdoApretado=true;
+                    }
+                }
+                break;
+            case SDL_MOUSEBUTTONUP:
+                if(mouseCam){
+                    if (camara!=libre){
+                        if (botonIzquierdoApretado){
+                            girarPalo=true;
+                            botonIzquierdoApretado=false;
+                            if (!movimientoPelotas) shoot();
+                            distPalo=0;
+                        }
+                    }
+                }
+                break;
+            case SDL_MOUSEMOTION:
+                if(mouseCam){
+                    if (camara==libre){
+                            anga+=evento.motion.xrel*sens;//factor de ajuste: 0,4
+                            angb-=evento.motion.yrel*sens;//factor de ajuste: 0,4
+                            if (angb > 85) angb = 85;
+                            if (angb < -85) angb = -85;
+                    } else {
+                        if(girarPalo){
+                            angPalo += evento.motion.xrel*sens;
+                            anga=angPalo;
+                        } else {
+                            distPalo += evento.motion.yrel*sens/3;
+                            if(distPalo>=2) distPalo=2;
+                            if(distPalo<=0) distPalo=0;
+                        }
+                    }
+                }
+                break;
+            case SDL_QUIT:
+                fin = true;
+                break;
+            case SDL_KEYDOWN:
+                switch(evento.key.keysym.sym){
+                    case SDLK_q:
+                        fin = true;
+                        break;
+                    case SDLK_LEFT:
+                        anga += 1;
+                        if (camara!=libre) angPalo=anga;
+                        break;
+                    case SDLK_RIGHT:
+                        anga -= 1;
+                        if (camara!=libre) angPalo=anga;
+                        break;
+                    case SDLK_UP:
+                        angb-=1;
+                        if (angb < -80) angb = -80;
+                        distPalo -= 0.02;
+                        if(distPalo<=0) distPalo=0;
+                        break;
+                    case SDLK_DOWN:
+                        angb+=1;
+                        if (angb > 80) angb = 80;
+                        distPalo += 0.02;
+                        if(distPalo>=2) distPalo=2;
+                        break;
+                    case SDLK_r:
+                        rad-=.05;//factor de ajuste: 0,05
+                        if (rad < 0.5) rad = 0.5;
+                        break;
+                    case SDLK_f:
+                        rad+=.05;//factor de ajuste: 0,05
+                        if (rad > 12) rad = 12;
+                        break;
+                    case SDLK_LSHIFT:
+                        centroz+=0.1;
+                        if (centroz > 10) centroz=10;
+                        break;
+                    case SDLK_SPACE:
+                        centroz-=0.1;
+                        if (centroz < 0.5) centroz=0.5;
+                        break;
+                    case SDLK_w:
+                        if (camara==libre){
+                            centrox+=0.1;
+                            if (centrox > 13) centrox=13;
+                        } else {
+                            distPalo -= 0.02;
+                            if(distPalo<=0) distPalo=0;
+                        }
+                        break;
+                    case SDLK_s:
+                        if (camara==libre){
+                            centrox-=0.1;
+                            if (centrox < -3) centrox=-3;
+                        } else {
+                            distPalo += 0.02;
+                            if(distPalo>=2) distPalo=2;
+                        }
+                        break;
+                    case SDLK_a:
+                        if (camara==libre){
+                            centroy-=0.1;
+                            if (centroy < -3) centroy=-3;
+                        } else {
+                            anga += 1;
+                            angPalo=anga;
+                        }
+                        break;
+                    case SDLK_d:
+                        if (camara==libre){
+                            centroy+=0.1;
+                            if (centroy > 8) centroy=8;
+                        } else {
+                            anga -= 1;
+                            angPalo=anga;
+                        }
+                        break;
+                    }
+                    break;
+                case SDL_KEYUP:
+                    switch(evento.key.keysym.sym){
+                        case SDLK_v:
+                            camara = (camara+1) % 3;
+                            if (camara == libre) {
+                                anga=0;
+                                angb=35;
+                                rad=10;
+                                centrox = 2.5;
+                                centroy = 5;
+                                centroz = 1;
+                            }
+                            if (camara == palo) {
+                                anga=angPalo;
+                            }
+                            break;
+                        case SDLK_SPACE:
+                            if (camara!=libre and !movimientoPelotas){
+                                shoot();
+                                distPalo=0;
+                            }
+                            break;
+                        case SDLK_p:
+                            pausa=!pausa;
+                            break;
+                        case SDLK_RETURN:
+                            posicionesIniciales();
+                            break;
+                        case SDLK_b:
+                            mouseCam=!mouseCam;
+                            break;
+                        case SDLK_F9:
+                            mostrarTexturas = !mostrarTexturas;
+                            break;
+                        case SDLK_F10:
+                            wireframe = !wireframe;
+                            break;
+                        case SDLK_F11:
+                            facetado = !facetado;
+                            break;
+                }
+                break;
+            }
+    }
 }
 
 
-bool Juego::loadObj(const char *path,std::vector<glm::vec3> &out_vertices,std::vector<glm::vec2> &out_uvs,std::vector<glm::vec3> &out_normals, std::vector< unsigned int > &vertexIndices){
-    std::vector< unsigned int > uvIndices, normalIndices;
+bool Juego::loadObj(const char *path,std::vector<glm::vec3> &out_vertices,std::vector<glm::vec2> &out_uvs,std::vector<glm::vec3> &out_normals){
+    std::vector< unsigned int > vertexIndices, uvIndices, normalIndices;
     std::vector< glm::vec3 > temp_vertices;
     std::vector< glm::vec2 > temp_uvs;
     std::vector< glm::vec3 > temp_normals;
@@ -503,33 +556,20 @@ bool Juego::loadObj(const char *path,std::vector<glm::vec3> &out_vertices,std::v
 }
 
 
-void Juego::dibujarObj(GLuint text,float escalaX,float escalaY,float escalaZ,float translX,float translY,float translZ,std::vector<glm::vec3> vertices,std::vector<glm::vec2> uvs,std::vector<glm::vec3> normals,std::vector<unsigned int> vertexIndices,float angulo,bool rotarPalo){
-// MESA
-    glPushMatrix();
-    glTranslatef(translX,translY,translZ);
-    if(rotarPalo){
-        glRotatef(angPalo,0,0,1);
-        glRotatef(5,1,0,0);
-    }
-    glScalef(escalaX,escalaY,escalaZ);
-    glRotatef(angulo,1,0,0);
-    glMateriali(GL_FRONT_AND_BACK, GL_SPECULAR, 0);
-    glMaterialf(GL_FRONT_AND_BACK, GL_DIFFUSE, 30);
-    glMaterialf(GL_FRONT_AND_BACK, GL_AMBIENT, 100);
+void Juego::dibujarObj(GLuint text,std::vector<glm::vec3> vertices,std::vector<glm::vec2> uvs,std::vector<glm::vec3> normals){
     glBindTexture(GL_TEXTURE_2D, text);
     glBegin(GL_QUADS);
-    for(int i =0;i< vertexIndices.size();i++){
+    for(int i =0;i< vertices.size();i++){
         glTexCoord2d(uvs[i][0],uvs[i][1]);
         glNormal3f(normals[i][0],normals[i][1],normals[i][2]);
         glVertex3f(vertices[i][0],vertices[i][1],vertices[i][2]);
     }
     glEnd();
-    glPopMatrix();
 }
 
 
 void Juego::cargarText(GLuint &text,std::string archivo){
-FREE_IMAGE_FORMAT fif = FreeImage_GetFIFFromFilename(archivo.c_str());
+    FREE_IMAGE_FORMAT fif = FreeImage_GetFIFFromFilename(archivo.c_str());
     FIBITMAP* bitmap = FreeImage_Load(fif, archivo.c_str());
     bitmap = FreeImage_ConvertTo24Bits(bitmap);
 
