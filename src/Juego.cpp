@@ -49,7 +49,7 @@ void Juego::inicializar(){
     bool res2 = loadObj("mod/poolCue.obj",verticesPalo,uvsPalo,normalsPalo,vertexIndicesPalo);
 
     // textura mesa
-    std::string archivoMesa = "tex/mesa.jpg";
+    std::string archivoMesa = "tex/mesaAzul.png";
     cargarText(texMesa,archivoMesa);
     std::string archivoPalo = "tex/poolPalo.jpg";
     cargarText(texPalo,archivoPalo);
@@ -73,7 +73,6 @@ void Juego::mainLoop(){
     //HABILITAR LUZ 0
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0); // habilita la luz 0
-    //glEnable(GL_COLOR_MATERIAL);
 
     GLfloat luz_0_ambiente[]  = {1.0f, 1.0f, 1.0f, 1.0f};
     GLfloat luz_0_difusa[]  = {0.8f, 0.8f, 0.8f, 1.0f};
@@ -94,23 +93,16 @@ void Juego::mainLoop(){
 
 
     if (camara == libre) {
-        //printf("LIBREEEEEE\n");
         actualizarCam(anga,angb,rad);
         gluLookAt(x+centrox,y+centroy,z+centroz,centrox,centroy,centroz,0,0,1);
     }
     if (camara == palo) {
-        //printf("PALOOOO\n");
         actualizarCamaraPalo(anga);
         gluLookAt(pelotas[0]->getPos()[0]+x,pelotas[0]->getPos()[1]+y,1,pelotas[0]->getPos()[0],pelotas[0]->getPos()[1],0.5,0,0,1);
     }
     if (camara == techo) {
-        //printf("TECHOOO\n");
         gluLookAt(2.5,5,10,2.5,5,0,-1,0,0);
     }
-
-    if (camara==techo) printf("huehuehue\n");
-    if (camara==libre) printf("lalala\n");
-    if (camara==palo) printf("n_n\n");
 
     dibujarObj(texMesa,0.1128,0.1022,0.105,2.5,5,-radio,vertices,uvs,normals,vertexIndices,90,false);
 
