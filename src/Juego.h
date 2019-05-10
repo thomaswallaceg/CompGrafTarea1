@@ -17,6 +17,7 @@ class Juego
         bool salir();
 
     private:
+
         bool fin=false;
         SDL_Event evento;
 
@@ -25,6 +26,7 @@ class Juego
 
         bool wireframe = false;
         bool mostrarTexturas = true;
+        bool facetado = false;
 
         int contadorFrames = 0;
         bool teclaApretada = false;
@@ -54,6 +56,7 @@ class Juego
         bool botonIzquierdoApretado=false;
 
         // PELOTAS
+        float radio = 0.16;
         bool movimientoPelotas;
         std::vector<Pelota*> pelotas;
         std::vector<std::vector<bool>> colisiones;
@@ -62,8 +65,13 @@ class Juego
         std::vector< glm::vec2 > uvs;
         std::vector< glm::vec3 > normals;
         std::vector<unsigned int> vertexIndices;
+        std::vector< glm::vec3 > verticesPalo;
+        std::vector< glm::vec2 > uvsPalo;
+        std::vector< glm::vec3 > normalsPalo;
+        std::vector<unsigned int> vertexIndicesPalo;
 
         GLuint texMesa=0;
+        GLuint texPalo=0;
 
         void shoot();
         void posicionesIniciales();
@@ -73,5 +81,6 @@ class Juego
         void dibujarPalo();
         void apretarTecla();
         bool loadObj(const char *path,std::vector<glm::vec3> &out_vertices,std::vector<glm::vec2> &out_uvs,std::vector<glm::vec3> &out_normals,std::vector< unsigned int > &vertexIndices);
-
+        void cargarText(GLuint &texMesa,std::string archivo);
+        void dibujarObj(GLuint text,float escalaX,float escalaY,float escalaZ,float translX,float translY,float translZ,std::vector<glm::vec3> vertices,std::vector<glm::vec2> uvs,std::vector<glm::vec3> normals,std::vector<unsigned int> vertexIndices,float angulo,bool alrevez);
 };

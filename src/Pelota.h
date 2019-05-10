@@ -7,7 +7,7 @@
 class Pelota
 {
     public:
-        Pelota(int id);
+        Pelota(int id,float radio);
         virtual ~Pelota();
 
         std::vector<double> getPos();
@@ -31,6 +31,7 @@ class Pelota
         void cargarTextura();
 
     private:
+        float radio;
         int id;
         std::vector<double> pos, lastPos, vel, angulos;
         GLuint tex;

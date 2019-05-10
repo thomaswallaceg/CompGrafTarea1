@@ -9,8 +9,9 @@
 #define PI 3.14159265
 
 
-Pelota::Pelota(int i)
+Pelota::Pelota(int i,float radio)
 {
+    this->radio= radio;
     id = i;
     pos=std::vector<double>(2);
     vel=std::vector<double>(2);
@@ -27,8 +28,8 @@ Pelota::~Pelota(){}
 void Pelota::dibujarPelota(bool pausa){
 
     if ((lastPos[0] != pos[0] || lastPos[1] != pos[1]) && !pausa){
-        angulos[0] = angulos[0] + 900/3.141592 * (pos[0]-lastPos[0]);
-        angulos[1] = angulos[1] + 900/3.141592 * (pos[1]-lastPos[1]);
+        angulos[0] = angulos[0] + (180/(radio * PI)) * (pos[0]-lastPos[0]);
+        angulos[1] = angulos[1] + (180/(radio * PI)) * (pos[1]-lastPos[1]);
         while (angulos[0] > 360) angulos[0] = angulos[0] - 360;
         while (angulos[1] > 360) angulos[1] = angulos[1] - 360;
     }
@@ -41,10 +42,8 @@ void Pelota::dibujarPelota(bool pausa){
     glRotatef(-angulos[1],1,0,0);
     glRotatef(-angulos[0],0,1,0);
 
-    //glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, tex);
-
-    drawHalfSphere(20, 20, 0.2);
+    drawHalfSphere(20, 20, radio);
 
     glPopMatrix();
 }
@@ -65,10 +64,16 @@ void Pelota::actualizarPosYVel(){
 }
 
 void Pelota::chequearBordes(){
-    if (pos[0] <= 0.2 && vel[0] < 0) {vel[0]=-vel[0]; ultimoChoque = -1;}
-    if (pos[0] >= 4.8 && vel[0] > 0) {vel[0]=-vel[0]; ultimoChoque = -1;}
-    if (pos[1] <= 0.2 && vel[1] < 0) {vel[1]=-vel[1]; ultimoChoque = -1;}
-    if (pos[1] >= 9.8 && vel[1] > 0) {vel[1]=-vel[1]; ultimoChoque = -1;}
+    if (pos[0] <= radio && vel[0] < 0) {
+        if (pos[1] < 5.32 && pos[1] > 4.68){
+            //chequearPunta(4);
+        }
+        vel[0]=-vel[0];
+        ultimoChoque = -1;
+    }
+    if (pos[0] >= 5-radio && vel[0] > 0) {vel[0]=-vel[0]; ultimoChoque = -1;}
+    if (pos[1] <= radio && vel[1] < 0) {vel[1]=-vel[1]; ultimoChoque = -1;}
+    if (pos[1] >= 10-radio && vel[1] > 0) {vel[1]=-vel[1]; ultimoChoque = -1;}
 }
 
 
@@ -113,18 +118,18 @@ void Pelota::drawHalfSphere(int lats, int longs, GLfloat r) {
     int halfLats = lats;
     for(i = 0; i <= halfLats; i++)
     {
-        double lat0 = 3.141592 * (-0.5 + (double) (i - 1) / lats);
+        double lat0 = PI * (-0.5 + (double) (i - 1) / lats);
         double z0 = sin(lat0);
         double zr0 = cos(lat0);
 
-        double lat1 = 3.141592 * (-0.5 + (double) i / lats);
+        double lat1 = PI * (-0.5 + (double) i / lats);
         double z1 = sin(lat1);
         double zr1 = cos(lat1);
 
         glBegin(GL_QUAD_STRIP);
         for(j = 0; j <= longs; j++)
         {
-            double lng = 2 * 3.141592 * (double) (j - 1) / longs;
+            double lng = 2 * PI * (double) (j - 1) / longs;
             double x = cos(lng);
             double y = sin(lng);
 

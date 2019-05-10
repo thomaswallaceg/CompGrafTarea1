@@ -12,7 +12,7 @@
 Juego::Juego(){
 
     // PELOTAS
-    for (int i=0; i < 16; i++) pelotas.push_back(new Pelota(i));
+    for (int i=0; i < 16; i++) pelotas.push_back(new Pelota(i,radio));
 
     for (int i=0; i<pelotas.size();i++){
         std::vector<bool> aux;
@@ -39,37 +39,21 @@ void Juego::inicializar(){
 
     glEnable(GL_DEPTH_TEST);
     glMatrixMode(GL_MODELVIEW);
+    glEnable(GL_NORMALIZE);
 
-    float pos[] = {0.0,0.0,0.0,1.0};
-    glLightfv(GL_LIGHT0, GL_POSITION, pos);
+    //float pos[] = {0.0,0.0,0.0,1.0};
+    //glLightfv(GL_LIGHT0, GL_POSITION, pos);
 
     // modelo mesa
     bool res = loadObj("mod/mesa.obj", vertices, uvs, normals,vertexIndices);
+    bool res2 = loadObj("mod/poolCue.obj",verticesPalo,uvsPalo,normalsPalo,vertexIndicesPalo);
 
     // textura mesa
-    std::string archivo = "tex/mesa.jpg";
+    std::string archivoMesa = "tex/mesa.jpg";
+    cargarText(texMesa,archivoMesa);
+    std::string archivoPalo = "tex/poolPalo.jpg";
+    cargarText(texPalo,archivoPalo);
 
-    FREE_IMAGE_FORMAT fif = FreeImage_GetFIFFromFilename(archivo.c_str());
-    FIBITMAP* bitmap = FreeImage_Load(fif, archivo.c_str());
-    bitmap = FreeImage_ConvertTo24Bits(bitmap);
-
-    int w = FreeImage_GetWidth(bitmap);
-    int h = FreeImage_GetHeight(bitmap);
-
-    void* datos = FreeImage_GetBits(bitmap);
-
-    glGenTextures(1, &texMesa);
-
-    glBindTexture(GL_TEXTURE_2D, texMesa);
-
-    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_BGR, GL_UNSIGNED_BYTE, datos);
 
 }
 
@@ -80,32 +64,34 @@ void Juego::mainLoop(){
     if (wireframe) glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
     else glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
 
+    if (facetado) glShadeModel(GL_FLAT);
+    else glShadeModel(GL_SMOOTH);
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
 
-    /*
-    GLfloat luz_posicion[]  = {2.5f, 10.0f, 5.0f, 1.0f};
-    GLfloat luz_ambiente[]  = {20.0f, 20.0f, 20.0f, 1.0f};
-    GLfloat luz_difusa[]    = {1.0f, 1.0f, 1.0f, 1.0f};
-    GLfloat luz_especular[] = {1.0f, 1.0f, 1.0f, 1.0f};
-    GLfloat luz_direccion[] = {0.0f, 0.0f, -1.0f};
-
     //HABILITAR LUZ 0
     glEnable(GL_LIGHTING);
-    glEnable(GL_COLOR_MATERIAL);
     glEnable(GL_LIGHT0); // habilita la luz 0
-    glEnable(GL_LIGHT1); // habilita la luz 1
-    glEnable(GL_LIGHT2); // habilita la luz 1
-    glEnable(GL_LIGHT3); // habilita la luz 1
-    glEnable(GL_LIGHT4); // habilita la luz 1
-    glLightfv(GL_LIGHT0, GL_AMBIENT, luz_ambiente);
-    glLightfv(GL_LIGHT1, GL_POSITION, luz_posicion);
-    glLightfv(GL_LIGHT2, GL_POSITION, luz_difusa);
-    glLightfv(GL_LIGHT3, GL_POSITION, luz_especular);
-    glLightfv(GL_LIGHT4, GL_POSITION, luz_direccion);
+    //glEnable(GL_COLOR_MATERIAL);
+
+    GLfloat luz_0_ambiente[]  = {1.0f, 1.0f, 1.0f, 1.0f};
+    GLfloat luz_0_difusa[]  = {0.8f, 0.8f, 0.8f, 1.0f};
+    GLfloat luz_0_especular[] = {10.0f, 10.0f, 10.0f, 1.0f};
+    GLfloat luz_0_posicion[] = {2.5f, 5.0f, 1.0f, 1.0f};
+
+    glLightfv(GL_LIGHT0, GL_AMBIENT, luz_0_ambiente);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, luz_0_difusa);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, luz_0_especular);
+    glLightfv(GL_LIGHT0, GL_POSITION, luz_0_posicion);
 
     glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-    */
+
+
+
+    glColor3f(1,1,1);
+
+
 
     if (camara == libre) {
         //printf("LIBREEEEEE\n");
@@ -126,23 +112,21 @@ void Juego::mainLoop(){
     if (camara==libre) printf("lalala\n");
     if (camara==palo) printf("n_n\n");
 
-    // MESA
-    glPushMatrix();
-    glTranslatef(2.5,5,-0.2);
-    glScalef(0.113,0.1024,0.105);
-    glRotatef(90,1,0,0);
-    glBindTexture(GL_TEXTURE_2D, texMesa);
-    glBegin(GL_QUADS);
-    for(int i =0;i< vertexIndices.size();i++){
-        glTexCoord2d(uvs[i][0],uvs[i][1]);
-        glNormal3f(normals[i][0],normals[i][1],normals[i][2]);
-        glVertex3f(vertices[i][0],vertices[i][1],vertices[i][2]);
-    }
+    dibujarObj(texMesa,0.1128,0.1022,0.105,2.5,5,-radio,vertices,uvs,normals,vertexIndices,90,false);
+
+
+    glBegin(GL_LINES);
+        glVertex3f(-2,9.6,0);
+        glVertex3f(7,9.6,0);
+        glVertex3f(-2,5.32,0);
+        glVertex3f(7,5.3,0);
+        glVertex3f(-2,0.4,0);
+        glVertex3f(7,0.4,0);
     glEnd();
-    glPopMatrix();
 
-    glColor3f(1,1,1);
-
+    glMateriali(GL_FRONT_AND_BACK, GL_SPECULAR, 500);
+    glMaterialf(GL_FRONT_AND_BACK, GL_DIFFUSE, 70);
+    glMaterialf(GL_FRONT_AND_BACK, GL_AMBIENT, 50);
 
     movimientoPelotas = false;
     for (int i=0; i < pelotas.size(); i++){
@@ -156,11 +140,11 @@ void Juego::mainLoop(){
         pelotas[i]->dibujarPelota(pausa);
     }
 
-    glDisable(GL_TEXTURE_2D);
     if (!movimientoPelotas && !pausa && camara!=libre){
-        dibujarPalo();
+        dibujarObj(texPalo,0.035,0.035,0.035,pelotas[0]->getPos()[0],pelotas[0]->getPos()[1]-5.5-distPalo,0.4,verticesPalo,uvsPalo,normalsPalo,vertexIndicesPalo,-270,true);
     }
 
+    glDisable(GL_TEXTURE_2D);
     int xm,ym;
     SDL_GetMouseState(&xm, &ym);
     while(SDL_PollEvent(&evento)){
@@ -329,6 +313,11 @@ void Juego::mainLoop(){
                         wireframe = !wireframe;
                         apretarTecla();
                     }
+                case SDLK_F11:
+                    if (!teclaApretada){
+                        facetado = !facetado;
+                        apretarTecla();
+                    }
                     break;
                 }
                 break;
@@ -353,14 +342,14 @@ void Juego::dibujarPalo(){
         glVertex3f(-0.05,+0.4+distPalo,0);
         glVertex3f(-0.05,5+distPalo,0);
     glEnd();
-    glColor3ub(255,255,255);
+    //glColor3ub(255,255,255);
     glBegin(GL_POLYGON);
         glVertex3f(0,0.4+distPalo,0.05);
         glVertex3f(0.05,0.4+distPalo,0);
         glVertex3f(0,0.4+distPalo,-0.05);
         glVertex3f(-0.05,0.4+distPalo,0);
     glEnd();
-    glColor3ub(0,0,255);
+    //glColor3ub(0,0,255);
     glBegin(GL_POLYGON);
         glVertex3f(0,5+distPalo,0.05);
         glVertex3f(0.05,5+distPalo,0);
@@ -389,7 +378,7 @@ void Juego::chequearColision(int i, int j){
     double dx = pelotas[i]->getPos()[0] - pelotas[j]->getPos()[0];
     double dy = pelotas[i]->getPos()[1] - pelotas[j]->getPos()[1];
     double dist = hypot(dx, dy);
-    if (dist < 0.4) {
+    if (dist < 2*radio) {
         if ((!colisiones[i][j]) && ((pelotas[i]->getUltimoChoque()!=i) || (pelotas[j]->getUltimoChoque()!=i))){
             pelotas[i]->setUltimoChoque(j);
             pelotas[j]->setUltimoChoque(i);
@@ -423,11 +412,11 @@ void Juego::posicionesIniciales(){
     double centroTy = 7.5;
     double espacioy = 0.355;
     double espaciox = 0.41;
-    double mult = 1.3;
+    double mult = 0.9;
 
     double centroTxpar = centroTximpar + (espaciox*mult)/2;
 
-    pelotas[0]->setPos(centroTximpar,2.5);
+    pelotas[0]->setPos(2.5,5);
 
 
 
@@ -521,3 +510,52 @@ bool Juego::loadObj(const char *path,std::vector<glm::vec3> &out_vertices,std::v
     }
 }
 
+
+void Juego::dibujarObj(GLuint text,float escalaX,float escalaY,float escalaZ,float translX,float translY,float translZ,std::vector<glm::vec3> vertices,std::vector<glm::vec2> uvs,std::vector<glm::vec3> normals,std::vector<unsigned int> vertexIndices,float angulo,bool rotarPalo){
+// MESA
+    glPushMatrix();
+    glTranslatef(translX,translY,translZ);
+    if(rotarPalo){
+        glRotatef(angPalo,0,0,1);
+        glRotatef(5,1,0,0);
+    }
+    glScalef(escalaX,escalaY,escalaZ);
+    glRotatef(angulo,1,0,0);
+    glMateriali(GL_FRONT_AND_BACK, GL_SPECULAR, 0);
+    glMaterialf(GL_FRONT_AND_BACK, GL_DIFFUSE, 30);
+    glMaterialf(GL_FRONT_AND_BACK, GL_AMBIENT, 100);
+    glBindTexture(GL_TEXTURE_2D, text);
+    glBegin(GL_QUADS);
+    for(int i =0;i< vertexIndices.size();i++){
+        glTexCoord2d(uvs[i][0],uvs[i][1]);
+        glNormal3f(normals[i][0],normals[i][1],normals[i][2]);
+        glVertex3f(vertices[i][0],vertices[i][1],vertices[i][2]);
+    }
+    glEnd();
+    glPopMatrix();
+}
+
+
+void Juego::cargarText(GLuint &text,std::string archivo){
+FREE_IMAGE_FORMAT fif = FreeImage_GetFIFFromFilename(archivo.c_str());
+    FIBITMAP* bitmap = FreeImage_Load(fif, archivo.c_str());
+    bitmap = FreeImage_ConvertTo24Bits(bitmap);
+
+    int w = FreeImage_GetWidth(bitmap);
+    int h = FreeImage_GetHeight(bitmap);
+
+    void* datos = FreeImage_GetBits(bitmap);
+
+    glGenTextures(1, &text);
+
+    glBindTexture(GL_TEXTURE_2D, text);
+
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_BGR, GL_UNSIGNED_BYTE, datos);
+    }
