@@ -1,24 +1,22 @@
 #include "SDL/SDL.h"
 #include "SDL/SDL_opengl.h"
-#include "FreeImage.h"
 #include "Pelota.h"
 #include <iostream>
 #include <math.h>
-#include <sstream>
 
 #define PI 3.14159265
 
 
-Pelota::Pelota(int i,float radio)
+Pelota::Pelota(int id,float radio,GLuint tex)
 {
-    this->radio= radio;
-    id = i;
+    this->id = id;
+    this->radio = radio;
+    this->tex = tex;
     pos=std::vector<double>(2);
     vel=std::vector<double>(2);
     lastPos=std::vector<double>(2);
     angulos=std::vector<double>(2);
     vel[0]=vel[1]=pos[0]=pos[1]=lastPos[0]=lastPos[1]=angulos[0]=angulos[1]=0;
-    tex = 0;
     ultimoChoque = -1;
 }
 
@@ -33,8 +31,6 @@ void Pelota::dibujarPelota(bool pausa){
         while (angulos[0] > 360) angulos[0] = angulos[0] - 360;
         while (angulos[1] > 360) angulos[1] = angulos[1] - 360;
     }
-
-    if (tex==0) cargarTextura();
 
     glPushMatrix();
 
@@ -171,38 +167,4 @@ void Pelota::drawHalfSphere(int lats, int longs, GLfloat r) {
         }
         glEnd();
     }
- }
-
- void Pelota::cargarTextura(){
-     // CARGAR TEXTURA BOLA
-    std::stringstream str;
-    str << id;
-    std::string archivo = "tex/pelotas/" + str.str() + ".png";
-
-    FREE_IMAGE_FORMAT fif = FreeImage_GetFIFFromFilename(archivo.c_str());
-    FIBITMAP* bitmap = FreeImage_Load(fif, archivo.c_str());
-    bitmap = FreeImage_ConvertTo24Bits(bitmap);
-
-    int w = FreeImage_GetWidth(bitmap);
-    int h = FreeImage_GetHeight(bitmap);
-
-    void* datos = FreeImage_GetBits(bitmap);
-
-    GLuint textura;
-    glGenTextures(1, &textura);
-
-    glBindTexture(GL_TEXTURE_2D, textura);
-
-    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_BGR, GL_UNSIGNED_BYTE, datos);
-
-    tex = textura;
-
-    delete datos;
  }

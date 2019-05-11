@@ -1,20 +1,19 @@
 #include "Juego.h"
 #include "SDL/SDL.h"
 #include "SDL/SDL_opengl.h"
-#include "FreeImage.h"
 #include <math.h>
 
 #define PI 3.14159265
-#define techo 0
-#define palo 1
-#define libre 2
+#define TECHO 0
+#define PALO 1
+#define LIBRE 2
+#define MESA 2
 
-Juego::Juego(){
-
+Juego::Juego(){
+    recursos = new Recursos();
     // PELOTAS
-    for (int i=0; i < 16; i++) pelotas.push_back(new Pelota(i,radio));
-
-    for (int i=0; i<pelotas.size();i++){
+    for (int i=0; i<16;i++){
+        GLuint tex = recursos->cargarTexturaPelota(i);        pelotas.push_back(new Pelota(i,radio,tex));
         std::vector<bool> aux;
         colisiones.push_back(aux);
         for (int j=0; j<pelotas.size();j++){
@@ -41,17 +40,9 @@ void Juego::inicializar(){
     glMatrixMode(GL_MODELVIEW);
     glEnable(GL_NORMALIZE);
 
-    // modelo mesa
-    bool res = loadObj("mod/mesa.obj", verticesMesa, uvsMesa, normalesMesa);
-    bool res2 = loadObj("mod/poolCue.obj",verticesPalo,uvsPalo,normalesPalo);
-
-    // textura mesa
-    std::string archivoMesa = "tex/mesaAzul.png";
-    cargarText(texMesa,archivoMesa);
-    std::string archivoPalo = "tex/poolPalo.jpg";
-    cargarText(texPalo,archivoPalo);
-
-
+    // CARGAR MODELOS
+    recursos->cargarModelo(PALO);
+    recursos->cargarModelo(MESA);
 }
 
 void Juego::mainLoop(){
@@ -85,15 +76,15 @@ void Juego::mainLoop(){
 
     glColor3f(1,1,1);
 
-    if (camara == libre) {
+    if (camara == LIBRE) {
         actualizarCamaraLibre(anga,angb,rad);
         gluLookAt(x+centrox,y+centroy,z+centroz,centrox,centroy,centroz,0,0,1);
     }
-    if (camara == palo) {
+    if (camara == PALO) {
         actualizarCamaraPalo(anga);
         gluLookAt(pelotas[0]->getPos()[0]+x,pelotas[0]->getPos()[1]+y,1,pelotas[0]->getPos()[0],pelotas[0]->getPos()[1],0.5,0,0,1);
     }
-    if (camara == techo) {
+    if (camara == TECHO) {
         gluLookAt(2.5,5,10,2.5,5,0,-1,0,0);
     }
 
@@ -105,7 +96,7 @@ void Juego::mainLoop(){
     glMateriali(GL_FRONT_AND_BACK, GL_SPECULAR, 0);
     glMaterialf(GL_FRONT_AND_BACK, GL_DIFFUSE, 30);
     glMaterialf(GL_FRONT_AND_BACK, GL_AMBIENT, 100);
-    dibujarObj(texMesa,verticesMesa,uvsMesa,normalesMesa);
+    recursos->dibujarModelo(MESA);
     glPopMatrix();
 
     glBegin(GL_LINES);
@@ -150,21 +141,20 @@ void Juego::mainLoop(){
     }
 
     //PALO
-    if (!movimientoPelotas && !pausa && camara!=libre){
+    if (!movimientoPelotas && !pausa && camara!=LIBRE){
         glPushMatrix();
         glTranslatef(pelotas[0]->getPos()[0],pelotas[0]->getPos()[1],0);
         glRotatef(angPalo+180,0,0,1);
-        glRotatef(-5,1,0,0);
-        glTranslatef(0,-radio-distPalo,0);
+        glRotatef(-12,1,0,0);
+        glTranslatef(0,-radio-distPalo-0.03,0);
         glScalef(0.04,0.04,0.04);
         glRotatef(-270,1,0,0);
         glMateriali(GL_FRONT_AND_BACK, GL_SPECULAR, 0);
         glMaterialf(GL_FRONT_AND_BACK, GL_DIFFUSE, 30);
         glMaterialf(GL_FRONT_AND_BACK, GL_AMBIENT, 100);
-        dibujarObj(texPalo,verticesPalo,uvsPalo,normalesPalo);
+        recursos->dibujarModelo(PALO);
         glPopMatrix();
     }
-
     // HUD
     viewOrtho();
     /*
@@ -183,35 +173,8 @@ void Juego::mainLoop(){
     SDL_GL_SwapBuffers();
 }
 
-void Juego::dibujarPalo(){
-    glPushMatrix();
-    glTranslatef(pelotas[0]->getPos()[0],pelotas[0]->getPos()[1],0);
-    glRotatef(angPalo,0,0,1);
-    glRotatef(5,1,0,0);
-    glBegin(GL_LINES);
-        glVertex3f(0.05,0.4+distPalo,0);
-        glVertex3f(0.05,5+distPalo,0);
-        glVertex3f(-0.05,+0.4+distPalo,0);
-        glVertex3f(-0.05,5+distPalo,0);
-    glEnd();
-    //glColor3ub(255,255,255);
-    glBegin(GL_POLYGON);
-        glVertex3f(0,0.4+distPalo,0.05);
-        glVertex3f(0.05,0.4+distPalo,0);
-        glVertex3f(0,0.4+distPalo,-0.05);
-        glVertex3f(-0.05,0.4+distPalo,0);
-    glEnd();
-    //glColor3ub(0,0,255);
-    glBegin(GL_POLYGON);
-        glVertex3f(0,5+distPalo,0.05);
-        glVertex3f(0.05,5+distPalo,0);
-        glVertex3f(0,5+distPalo,-0.05);
-        glVertex3f(-0.05,5+distPalo,0);
-    glEnd();
 
-    glPopMatrix();
- }
-
+///////////////////////////////////// AUXILIARES //////////////////////////////////////////////////////////
 void Juego::actualizarCamaraLibre(float x_angle, float y_angle,float radius){
     x = cos(x_angle*PI/180) * cos(y_angle*PI/180) * radius;
     y = -sin(x_angle*PI/180) * cos(y_angle*PI/180) * radius;
@@ -219,9 +182,9 @@ void Juego::actualizarCamaraLibre(float x_angle, float y_angle,float radius){
 }
 
 void Juego::actualizarCamaraPalo(float x_angle){
-    x = cos((x_angle+90)*PI/180) * 4;
-    y = sin((x_angle+90)*PI/180) * 4;
-    z = 1;
+    x = cos((x_angle+90)*PI/180) * 3;
+    y = sin((x_angle+90)*PI/180) * 3;
+    z = 1.5;
 }
 
 void Juego::chequearColision(int i, int j){
@@ -329,7 +292,7 @@ void Juego::procesarEntrada(){
                 break;
             case SDL_MOUSEBUTTONUP:
                 if(mouseCam){
-                    if (camara!=libre){
+                    if (camara!=LIBRE){
                         if (botonIzquierdoApretado){
                             girarPalo=true;
                             botonIzquierdoApretado=false;
@@ -341,7 +304,7 @@ void Juego::procesarEntrada(){
                 break;
             case SDL_MOUSEMOTION:
                 if(mouseCam){
-                    if (camara==libre){
+                    if (camara==LIBRE){
                             anga+=evento.motion.xrel*sens;//factor de ajuste: 0,4
                             angb-=evento.motion.yrel*sens;//factor de ajuste: 0,4
                             if (angb > 85) angb = 85;
@@ -368,11 +331,11 @@ void Juego::procesarEntrada(){
                         break;
                     case SDLK_LEFT:
                         anga += 1;
-                        if (camara!=libre) angPalo=anga;
+                        if (camara!=LIBRE) angPalo=anga;
                         break;
                     case SDLK_RIGHT:
                         anga -= 1;
-                        if (camara!=libre) angPalo=anga;
+                        if (camara!=LIBRE) angPalo=anga;
                         break;
                     case SDLK_UP:
                         angb-=1;
@@ -403,7 +366,7 @@ void Juego::procesarEntrada(){
                         if (centroz < 0.5) centroz=0.5;
                         break;
                     case SDLK_w:
-                        if (camara==libre){
+                        if (camara==LIBRE){
                             centrox+=0.1;
                             if (centrox > 13) centrox=13;
                         } else {
@@ -412,7 +375,7 @@ void Juego::procesarEntrada(){
                         }
                         break;
                     case SDLK_s:
-                        if (camara==libre){
+                        if (camara==LIBRE){
                             centrox-=0.1;
                             if (centrox < -3) centrox=-3;
                         } else {
@@ -421,7 +384,7 @@ void Juego::procesarEntrada(){
                         }
                         break;
                     case SDLK_a:
-                        if (camara==libre){
+                        if (camara==LIBRE){
                             centroy-=0.1;
                             if (centroy < -3) centroy=-3;
                         } else {
@@ -430,7 +393,7 @@ void Juego::procesarEntrada(){
                         }
                         break;
                     case SDLK_d:
-                        if (camara==libre){
+                        if (camara==LIBRE){
                             centroy+=0.1;
                             if (centroy > 8) centroy=8;
                         } else {
@@ -444,20 +407,20 @@ void Juego::procesarEntrada(){
                     switch(evento.key.keysym.sym){
                         case SDLK_v:
                             camara = (camara+1) % 3;
-                            if (camara == libre) {
-                                anga=0;
+                            if (camara == LIBRE) {
+                                anga=180;
                                 angb=35;
                                 rad=10;
                                 centrox = 2.5;
                                 centroy = 5;
                                 centroz = 1;
                             }
-                            if (camara == palo) {
+                            if (camara == PALO) {
                                 anga=angPalo;
                             }
                             break;
                         case SDLK_SPACE:
-                            if (camara!=libre and !movimientoPelotas){
+                            if (camara!=LIBRE and !movimientoPelotas){
                                 shoot();
                                 distPalo=0;
                             }
@@ -485,109 +448,3 @@ void Juego::procesarEntrada(){
             }
     }
 }
-
-
-bool Juego::loadObj(const char *path,std::vector<glm::vec3> &out_vertices,std::vector<glm::vec2> &out_uvs,std::vector<glm::vec3> &out_normals){
-    std::vector< unsigned int > vertexIndices, uvIndices, normalIndices;
-    std::vector< glm::vec3 > temp_vertices;
-    std::vector< glm::vec2 > temp_uvs;
-    std::vector< glm::vec3 > temp_normals;
-    FILE * file = fopen(path, "r");
-    if( file == NULL ){
-        printf("Impossible to open the file !\n");
-        return false;
-    }
-    while( 1 ){
-
-        char lineHeader[128];
-        // Lee la primera palabra de la línea
-        int res = fscanf(file, "%s", lineHeader);
-        if (res == EOF)
-            break; // EOF = End Of File, es decir, el final del archivo. Se finaliza el ciclo.
-        else if ( strcmp( lineHeader, "v" ) == 0 ){
-            glm::vec3 vertex;
-            fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z );
-            temp_vertices.push_back(vertex);
-        }else if ( strcmp( lineHeader, "vt" ) == 0 ){
-            glm::vec2 uv;
-            fscanf(file, "%f %f\n", &uv.x, &uv.y );
-            temp_uvs.push_back(uv);
-        }else if ( strcmp( lineHeader, "vn" ) == 0 ){
-            glm::vec3 normal;
-            fscanf(file, "%f %f %f\n", &normal.x, &normal.y, &normal.z );
-            temp_normals.push_back(normal);
-        }else if ( strcmp( lineHeader, "f" ) == 0 ){
-            std::string vertex1, vertex2, vertex3;
-            unsigned int vertexIndex[4], uvIndex[4], normalIndex[4];
-            int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2], &vertexIndex[3], &uvIndex[3], &normalIndex[3]  );
-            if (matches != 12){
-                printf("File can't be read by our simple parser : ( Try exporting with other options\n");
-                return false;
-            }
-            vertexIndices.push_back(vertexIndex[0]);
-            vertexIndices.push_back(vertexIndex[1]);
-            vertexIndices.push_back(vertexIndex[2]);
-            vertexIndices.push_back(vertexIndex[3]);
-            uvIndices.push_back(uvIndex[0]);
-            uvIndices.push_back(uvIndex[1]);
-            uvIndices.push_back(uvIndex[2]);
-            uvIndices.push_back(uvIndex[3]);
-            normalIndices.push_back(normalIndex[0]);
-            normalIndices.push_back(normalIndex[1]);
-            normalIndices.push_back(normalIndex[2]);
-            normalIndices.push_back(normalIndex[3]);
-        }
-    }
-    for( unsigned int i=0; i<vertexIndices.size(); i++ ){
-        unsigned int vertexIndex = vertexIndices[i];
-        glm::vec3 vertex = temp_vertices[ vertexIndex-1 ];
-        out_vertices.push_back(vertex);
-    }
-    for( unsigned int i=0; i<uvIndices.size(); i++ ){
-        unsigned int uvIndex = uvIndices[i];
-        glm::vec2 uv = temp_uvs[ uvIndex-1 ];
-        out_uvs.push_back(uv);
-    }
-    for( unsigned int i=0; i<normalIndices.size(); i++ ){
-        unsigned int normalIndex = normalIndices[i];
-        glm::vec3 normal = temp_normals[ normalIndex-1 ];
-        out_normals.push_back(normal);
-    }
-}
-
-
-void Juego::dibujarObj(GLuint text,std::vector<glm::vec3> vertices,std::vector<glm::vec2> uvs,std::vector<glm::vec3> normals){
-    glBindTexture(GL_TEXTURE_2D, text);
-    glBegin(GL_QUADS);
-    for(int i =0;i< vertices.size();i++){
-        glTexCoord2d(uvs[i][0],uvs[i][1]);
-        glNormal3f(normals[i][0],normals[i][1],normals[i][2]);
-        glVertex3f(vertices[i][0],vertices[i][1],vertices[i][2]);
-    }
-    glEnd();
-}
-
-
-void Juego::cargarText(GLuint &text,std::string archivo){
-    FREE_IMAGE_FORMAT fif = FreeImage_GetFIFFromFilename(archivo.c_str());
-    FIBITMAP* bitmap = FreeImage_Load(fif, archivo.c_str());
-    bitmap = FreeImage_ConvertTo24Bits(bitmap);
-
-    int w = FreeImage_GetWidth(bitmap);
-    int h = FreeImage_GetHeight(bitmap);
-
-    void* datos = FreeImage_GetBits(bitmap);
-
-    glGenTextures(1, &text);
-
-    glBindTexture(GL_TEXTURE_2D, text);
-
-    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_BGR, GL_UNSIGNED_BYTE, datos);
-    }

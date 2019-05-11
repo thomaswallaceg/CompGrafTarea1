@@ -7,7 +7,7 @@
 class Pelota
 {
     public:
-        Pelota(int id,float radio);
+        Pelota(int id,float radio,GLuint tex);
         virtual ~Pelota();
 
         std::vector<double> getPos();

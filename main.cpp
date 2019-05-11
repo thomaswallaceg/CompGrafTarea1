@@ -1,7 +1,6 @@
 #include <iostream>
 #include "SDL/SDL.h"
 #include "SDL/SDL_opengl.h"
-#include "src/Pelota.h"
 #include "src/Juego.h"
 #include <chrono>
 
@@ -27,6 +26,7 @@ int main(int argc, char *argv[]) {
         std::cerr << "No se pudo establecer el modo key-repeat: " << SDL_GetError() << std::endl;
         exit(1);
     }
+
 
     Juego *juego = new Juego();
     juego->inicializar();

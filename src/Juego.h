@@ -2,10 +2,7 @@
 #include "SDL/SDL.h"
 #include "SDL/SDL_opengl.h"
 #include "Pelota.h"
-
-#include <../glm/glm/vec2.hpp>
-#include <../glm/glm/vec3.hpp>
-
+#include "Recursos.h"
 
 class Juego
 {
@@ -18,6 +15,7 @@ class Juego
 
     private:
         SDL_Event evento;
+        Recursos* recursos;
 
             // AJUSTES
         bool pausa = false;
@@ -55,17 +53,6 @@ class Juego
         std::vector<Pelota*> pelotas;
         std::vector<std::vector<bool>> colisiones;
 
-        std::vector< glm::vec3 > verticesMesa;
-        std::vector< glm::vec2 > uvsMesa;
-        std::vector< glm::vec3 > normalesMesa;
-
-        std::vector< glm::vec3 > verticesPalo;
-        std::vector< glm::vec2 > uvsPalo;
-        std::vector< glm::vec3 > normalesPalo;
-
-        GLuint texMesa=0;
-        GLuint texPalo=0;
-
         void viewOrtho();
         void viewPerspective();
         void shoot();
@@ -74,9 +61,4 @@ class Juego
         void chequearColision(int i, int j);
         void actualizarCamaraLibre(float x_angle, float y_angle,float radius);
         void actualizarCamaraPalo(float x_angle);
-        void dibujarPalo();
-        void apretarTecla();
-        bool loadObj(const char *path,std::vector<glm::vec3> &out_vertices,std::vector<glm::vec2> &out_uvs,std::vector<glm::vec3> &out_normals);
-        void cargarText(GLuint &texMesa,std::string archivo);
-        void dibujarObj(GLuint text,std::vector<glm::vec3> vertices,std::vector<glm::vec2> uvs,std::vector<glm::vec3> normals);
 };
