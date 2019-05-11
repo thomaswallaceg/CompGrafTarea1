@@ -12,6 +12,8 @@ class Recursos
         void cargarModelo(int modelo); // 1:Mesa,2:Palo
         void dibujarModelo(int modelo); // 1:Mesa,2:Palo
         GLuint cargarTexturaPelota(int id);
+        void cargarHUD();
+        void texturaHUD(int i);
 
     private:
 
@@ -24,6 +26,8 @@ class Recursos
         std::vector< glm::vec2 > uvsPalo;
         std::vector< glm::vec3 > normalesPalo;
         GLuint texPalo=0;
+
+        std::vector<GLuint> texHUD;
 
         void drawObj(GLuint text,std::vector<glm::vec3> vertices,std::vector<glm::vec2> uvs,std::vector<glm::vec3> normals);
         bool loadObj(const char *path,std::vector<glm::vec3> &out_vertices,std::vector<glm::vec2> &out_uvs,std::vector<glm::vec3> &out_normals);

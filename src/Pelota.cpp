@@ -39,7 +39,7 @@ void Pelota::dibujarPelota(bool pausa){
     glRotatef(-angulos[0],0,1,0);
 
     glBindTexture(GL_TEXTURE_2D, tex);
-    drawHalfSphere(20, 20, radio);
+    drawHalfSphere(30, 30, radio);
 
     glPopMatrix();
 }

@@ -34,6 +34,21 @@ GLuint Recursos::cargarTexturaPelota(int id){
     return res;
 }
 
+void Recursos::cargarHUD(){
+    for (int i=0; i<1; i++){
+        GLuint aux;
+        texHUD.push_back(aux);
+        std::stringstream str;
+        str << i;
+        std::string archivo = "tex/menus/hud" + str.str() + ".png";
+        loadText(texHUD[i],archivo);
+    }
+}
+
+void Recursos::texturaHUD(int i){
+    glBindTexture(GL_TEXTURE_2D,texHUD[i]);
+}
+
 void Recursos::drawObj(GLuint text,std::vector<glm::vec3> vertices,std::vector<glm::vec2> uvs,std::vector<glm::vec3> normals){
     glBindTexture(GL_TEXTURE_2D, text);
     glBegin(GL_QUADS);
@@ -139,4 +154,4 @@ void Recursos::loadText(GLuint &text,std::string archivo){
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_BGR, GL_UNSIGNED_BYTE, datos);
 
     delete datos;
-    }
+}

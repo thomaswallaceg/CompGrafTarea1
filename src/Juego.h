@@ -39,6 +39,7 @@ class Juego
         float centroz = 1; // Posición cámara libre
         float sens = 0.4; // Sensibilidad
         bool mouseCam=false;
+        bool luzAmbiente=true;
 
         // PALO
         float angPalo=180;

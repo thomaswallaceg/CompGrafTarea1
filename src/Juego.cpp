@@ -43,6 +43,7 @@ void Juego::inicializar(){
     // CARGAR MODELOS
     recursos->cargarModelo(PALO);
     recursos->cargarModelo(MESA);
+    recursos->cargarHUD();
 }
 
 void Juego::mainLoop(){
@@ -58,21 +59,6 @@ void Juego::mainLoop(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
 
-    //HABILITAR LUZ 0
-    glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0); // habilita la luz 0
-
-    GLfloat luz_0_ambiente[]  = {1.0f, 1.0f, 1.0f, 1.0f};
-    GLfloat luz_0_difusa[]  = {0.8f, 0.8f, 0.8f, 1.0f};
-    GLfloat luz_0_especular[] = {10.0f, 10.0f, 10.0f, 1.0f};
-    GLfloat luz_0_posicion[] = {2.5f, 5.0f, 1.0f, 1.0f};
-
-    glLightfv(GL_LIGHT0, GL_AMBIENT, luz_0_ambiente);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, luz_0_difusa);
-    glLightfv(GL_LIGHT0, GL_SPECULAR, luz_0_especular);
-    glLightfv(GL_LIGHT0, GL_POSITION, luz_0_posicion);
-
-    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
     glColor3f(1,1,1);
 
@@ -93,9 +79,9 @@ void Juego::mainLoop(){
     glTranslatef(2.5,5,-radio);
     glScalef(0.1125,0.1022,0.105);
     glRotatef(90,1,0,0);
-    glMateriali(GL_FRONT_AND_BACK, GL_SPECULAR, 0);
+    glMaterialf(GL_FRONT_AND_BACK, GL_SPECULAR, 10);
     glMaterialf(GL_FRONT_AND_BACK, GL_DIFFUSE, 30);
-    glMaterialf(GL_FRONT_AND_BACK, GL_AMBIENT, 100);
+    glMaterialf(GL_FRONT_AND_BACK, GL_AMBIENT, 90);
     recursos->dibujarModelo(MESA);
     glPopMatrix();
 
@@ -108,7 +94,7 @@ void Juego::mainLoop(){
         glVertex3f(7,0.4,0);
     glEnd();
 
-    glMateriali(GL_FRONT_AND_BACK, GL_SPECULAR, 500);
+    glMaterialf(GL_FRONT_AND_BACK, GL_SPECULAR, 127);
     glMaterialf(GL_FRONT_AND_BACK, GL_DIFFUSE, 70);
     glMaterialf(GL_FRONT_AND_BACK, GL_AMBIENT, 50);
 
@@ -149,21 +135,72 @@ void Juego::mainLoop(){
         glTranslatef(0,-radio-distPalo-0.03,0);
         glScalef(0.5,0.35,0.5);
         glRotatef(-270,1,0,0);
-        glMateriali(GL_FRONT_AND_BACK, GL_SPECULAR, 0);
+        glMaterialf(GL_FRONT_AND_BACK, GL_SPECULAR, 50);
         glMaterialf(GL_FRONT_AND_BACK, GL_DIFFUSE, 30);
         glMaterialf(GL_FRONT_AND_BACK, GL_AMBIENT, 100);
         recursos->dibujarModelo(PALO);
         glPopMatrix();
     }
+
+    // LUZ 0
+    glEnable(GL_LIGHTING);
+
+    if (luzAmbiente) {
+    glEnable(GL_LIGHT0);
+    glDisable(GL_LIGHT1);
+
+    GLfloat luz_0_ambiente[]  = {1.0f, 1.0f, 1.0f, 1.0f};
+    GLfloat luz_0_difusa[]  = {1.0f, 1.0f, 1.0f, 1.0f};
+    GLfloat luz_0_especular[] = {1.0f, 1.0f, 1.0f, 0.0f};
+    GLfloat luz_0_posicion[] = {2.5f, 5.0f, 7.0f, 1.0f};
+    GLfloat luz_0_spotdir[] = {0.0f, 0.0f, 1.0f, 1.0f};
+    GLfloat luz_0_spotexp = 180;
+    GLfloat luz_0_spotcutoff = 60;
+
+    glLightfv(GL_LIGHT0, GL_AMBIENT, luz_0_ambiente);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, luz_0_difusa);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, luz_0_especular);
+    glLightfv(GL_LIGHT0, GL_POSITION, luz_0_posicion);
+    //glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, luz_0_spotdir);
+    //glLightf(GL_LIGHT0, GL_SPOT_EXPONENT, luz_0_spotexp);
+    //glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, luz_0_spotcutoff);
+
+
+    } else {
+        glEnable(GL_LIGHT1);
+        glDisable(GL_LIGHT0);
+
+        GLfloat luz_1_ambiente[]  = {1.0f, 0.4f, 0.4f, 1.0f};
+        GLfloat luz_1_difusa[]  = {0.5f, 0.2f, 0.2f, 1.0f};
+        GLfloat luz_1_especular[] = {1.0f, 0.4f, 0.4f, 1.0f};
+        GLfloat luz_1_posicion[] = {10.0f, 15.0f, 5.0f, 1.0f};
+
+
+        glLightfv(GL_LIGHT1, GL_AMBIENT, luz_1_ambiente);
+        glLightfv(GL_LIGHT1, GL_DIFFUSE, luz_1_difusa);
+        glLightfv(GL_LIGHT1, GL_SPECULAR, luz_1_especular);
+        glLightfv(GL_LIGHT1, GL_POSITION, luz_1_posicion);
+
+    }
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+
+
+    glDisable(GL_LIGHTING);
+
     // HUD
     viewOrtho();
-    /*
-    glBegin(GL_TRIANGLES);
-        glVertex2f(0,0);
-        glVertex2f(0,1280);
-        glVertex2f(720,0);
+    recursos->texturaHUD(0);
+    glBegin(GL_QUADS);
+        glTexCoord2f(0,0);
+        glVertex2f(200,10);
+        glTexCoord2f(1,0);
+        glVertex2f(520,10);
+        glTexCoord2f(1,1);
+        glVertex2f(520,110);
+        glTexCoord2f(0,1);
+        glVertex2f(200,110);
     glEnd();
-    */
+
     viewPerspective();
 
     glDisable(GL_TEXTURE_2D);
@@ -442,6 +479,9 @@ void Juego::procesarEntrada(){
                             break;
                         case SDLK_F11:
                             facetado = !facetado;
+                            break;
+                        case SDLK_F12:
+                            luzAmbiente=!luzAmbiente;
                             break;
                 }
                 break;
