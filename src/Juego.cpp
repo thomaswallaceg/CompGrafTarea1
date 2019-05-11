@@ -147,7 +147,7 @@ void Juego::mainLoop(){
         glRotatef(angPalo+180,0,0,1);
         glRotatef(-12,1,0,0);
         glTranslatef(0,-radio-distPalo-0.03,0);
-        glScalef(0.04,0.04,0.04);
+        glScalef(0.5,0.35,0.5);
         glRotatef(-270,1,0,0);
         glMateriali(GL_FRONT_AND_BACK, GL_SPECULAR, 0);
         glMaterialf(GL_FRONT_AND_BACK, GL_DIFFUSE, 30);

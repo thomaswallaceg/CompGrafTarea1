@@ -7,7 +7,7 @@ Recursos::~Recursos(){}
 
 void Recursos::cargarModelo(int modelo){
     if (modelo==1) {
-        bool res2 = loadObj("mod/poolCue.obj",verticesPalo,uvsPalo,normalesPalo);
+        bool res2 = loadObj("mod/cue.obj",verticesPalo,uvsPalo,normalesPalo);
         std::string archivoPalo = "tex/poolPalo.jpg";
         loadText(texPalo,archivoPalo);
     } else if (modelo==2) {
