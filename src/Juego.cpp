@@ -85,7 +85,7 @@ void Juego::mainLoop(){
     recursos->dibujarModelo(MESA);
     glPopMatrix();
 
-    glBegin(GL_LINES);
+/*    glBegin(GL_LINES);
         glVertex3f(-2,9.6,0);
         glVertex3f(7,9.6,0);
         glVertex3f(-2,5.32,0);
@@ -93,7 +93,9 @@ void Juego::mainLoop(){
         glVertex3f(-2,0.4,0);
         glVertex3f(7,0.4,0);
     glEnd();
+*/
 
+    // PELOTAS
     glMaterialf(GL_FRONT_AND_BACK, GL_SPECULAR, 127);
     glMaterialf(GL_FRONT_AND_BACK, GL_DIFFUSE, 70);
     glMaterialf(GL_FRONT_AND_BACK, GL_AMBIENT, 50);
@@ -103,21 +105,20 @@ void Juego::mainLoop(){
         pelotas[0]->setVel(0,0);
         pelotas[0]->setPos(2.5,2.5);
         pelotas[0]->setUltimoChoque(-1);
-        pelotas[0]->setAngulos(0,0);
         pelotas[0]->setLastPos(2.5,2.5);
     }
 
     movimientoPelotas = false;
     for (int i=0; i < pelotas.size(); i++){
-        if (!pelotas[0]->getMetida()){
+        if (!pelotas[i]->getMetida()){
             if (!pausa) {
-                pelotas[i]->actualizarPosYVel();
+                pelotas[i]->actualizarPosYVel(velocidad);
                 if (pelotas[i]->getVel()[0] != 0 || pelotas[i]->getVel()[1] != 0) movimientoPelotas = true;
                 pelotas[i]->chequearBordes();
                 for (int j=i+1; j < pelotas.size(); j++)
-                    chequearColision(i,j);
-            }
+                    if (!pelotas[j]->getMetida()) chequearColision(i,j);
             pelotas[i]->dibujarPelota(pausa);
+            }
         } else {
             for (int k=0; k<pelotas.size(); k++){
                 colisiones[i][k]=false;
@@ -188,22 +189,75 @@ void Juego::mainLoop(){
     glDisable(GL_LIGHTING);
 
     // HUD
+    glEnable(GL_TEXTURE_2D);
     viewOrtho();
-    recursos->texturaHUD(0);
-    glBegin(GL_QUADS);
-        glTexCoord2f(0,0);
-        glVertex2f(200,10);
-        glTexCoord2f(1,0);
-        glVertex2f(520,10);
-        glTexCoord2f(1,1);
-        glVertex2f(520,110);
-        glTexCoord2f(0,1);
-        glVertex2f(200,110);
-    glEnd();
 
+    if (controles) {
+        recursos->texturaHUD(3);
+        glBegin(GL_QUADS);
+            glTexCoord2f(0,0);
+            glVertex2f(0,0);
+            glTexCoord2f(1,0);
+            glVertex2f(1280,0);
+            glTexCoord2f(1,1);
+            glVertex2f(1280,720);
+            glTexCoord2f(0,1);
+            glVertex2f(0,720);
+        glEnd();
+    } else {
+        recursos->texturaHUD(0);
+        glBegin(GL_QUADS);
+            // ABAJO
+            glTexCoord2f(0,0.25);
+            glVertex2f(480,660);
+            glTexCoord2f(1,0.25);
+            glVertex2f(800,660);
+            glTexCoord2f(1,0.75);
+            glVertex2f(800,710);
+            glTexCoord2f(0,0.75);
+            glVertex2f(480,710);
+        glEnd();
+
+        // IZQUIERDA
+        for (int i = 0; i < 7; i++){
+            if (pelotas[i]->getMetida())
+                recursos->texturaHUD(2);
+            else
+                recursos->texturaHUD(1);
+            glBegin(GL_QUADS);
+                glTexCoord2f(0,0);
+                glVertex2f(10,150+i*60);
+                glTexCoord2f(1,0);
+                glVertex2f(70,150+i*60);
+                glTexCoord2f(1,1);
+                glVertex2f(70,150+(i+1)*60);
+                glTexCoord2f(0,1);
+                glVertex2f(10,150+(i+1)*60);
+            glEnd();
+        }
+
+        // DERECHA
+        for (int i = 0; i < 7; i++){
+            if (pelotas[i+9]->getMetida())
+                recursos->texturaHUD(2);
+            else
+                recursos->texturaHUD(1);
+            glBegin(GL_QUADS);
+                glTexCoord2f(0,0);
+                glVertex2f(1210,150+i*60);
+                glTexCoord2f(1,0);
+                glVertex2f(1270,150+i*60);
+                glTexCoord2f(1,1);
+                glVertex2f(1270,150+(i+1)*60);
+                glTexCoord2f(0,1);
+                glVertex2f(1210,150+(i+1)*60);
+            glEnd();
+        }
+    }
     viewPerspective();
 
     glDisable(GL_TEXTURE_2D);
+    velocidad=1;
 
     procesarEntrada();
 
@@ -230,10 +284,11 @@ void Juego::chequearColision(int i, int j){
         double dy = pelotas[i]->getPos()[1] - pelotas[j]->getPos()[1];
         double dist = hypot(dx, dy);
         if (dist < 2*radio) {
-            if ((!colisiones[i][j]) && ((pelotas[i]->getUltimoChoque()!=i) || (pelotas[j]->getUltimoChoque()!=i))){
-                pelotas[i]->setUltimoChoque(j);
-                pelotas[j]->setUltimoChoque(i);
-                colisiones[i][j]=true;
+            double nextdx = (pelotas[i]->getPos()[0] + pelotas[i]->getVel()[0]) - (pelotas[j]->getPos()[0] + pelotas[j]->getVel()[0]);
+            double nextdy = (pelotas[i]->getPos()[1] + pelotas[i]->getVel()[1]) - (pelotas[j]->getPos()[1] + pelotas[j]->getVel()[1]);
+            if (dist > hypot(nextdx,nextdy)) {
+                pelotas[i]->guardarRotacion();
+                pelotas[j]->guardarRotacion();
                 std::vector<double> normal = {dx/dist, dy/dist};
                 std::vector<double> tangente = {-normal[1], normal[0]};
                 double vni = pelotas[i]->getVel()[0] * normal[0] + pelotas[i]->getVel()[1] * normal[1];
@@ -250,7 +305,7 @@ void Juego::chequearColision(int i, int j){
 void Juego::shoot(){
     double velx = cos((angPalo-90)*PI/180);
     double vely = sin((angPalo-90)*PI/180);
-    pelotas[0]->setVel((velx*distPalo/2)/3,(vely*distPalo/2)/3);
+    pelotas[0]->setVel((velx*distPalo/2)/4,(vely*distPalo/2)/4);
     distPalo = 0;
 }
 
@@ -261,7 +316,7 @@ void Juego::viewOrtho()	{
 	glDisable(GL_LIGHTING);
 	glPushMatrix();
 	glLoadIdentity();
-	glOrtho( 0, 720, 0 , 1280, -1, 1 );
+	glOrtho( 0, 1280, 0 , 720, -1, 1 );
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 	glLoadIdentity();
@@ -287,7 +342,7 @@ void Juego::posicionesIniciales(){
     double centroTy = 7.5;
     double espacioy = 0.355;
     double espaciox = 0.41;
-    double mult = 0.9;
+    double mult = 0.85;
 
     double centroTxpar = centroTximpar + (espaciox*mult)/2;
 
@@ -438,6 +493,12 @@ void Juego::procesarEntrada(){
                             angPalo=anga;
                         }
                         break;
+                    case SDLK_9: // lento
+                        velocidad=0;
+                        break;
+                    case SDLK_0: // rapido
+                        velocidad=2;
+                        break;
                     }
                     break;
                 case SDL_KEYUP:
@@ -470,6 +531,14 @@ void Juego::procesarEntrada(){
                             break;
                         case SDLK_b:
                             mouseCam=!mouseCam;
+                            break;
+                        case SDLK_c:
+                            if(!pausa){
+                                pausa=true;
+                            }
+                            controles=!controles;
+                            if(!controles)
+                                pausa=false;
                             break;
                         case SDLK_F9:
                             mostrarTexturas = !mostrarTexturas;

@@ -1,6 +1,7 @@
 #include "Recursos.h"
 #include "FreeImage.h"
 #include <sstream>
+#include <stdio.h>
 
 Recursos::Recursos(){}
 Recursos::~Recursos(){}
@@ -35,7 +36,7 @@ GLuint Recursos::cargarTexturaPelota(int id){
 }
 
 void Recursos::cargarHUD(){
-    for (int i=0; i<1; i++){
+    for (int i=0; i<4; i++){
         GLuint aux;
         texHUD.push_back(aux);
         std::stringstream str;

@@ -19,6 +19,7 @@ class Juego
 
             // AJUSTES
         bool pausa = false;
+        bool controles = false;
 
         bool wireframe = false;
         bool mostrarTexturas = true;
@@ -40,6 +41,7 @@ class Juego
         float sens = 0.4; // Sensibilidad
         bool mouseCam=false;
         bool luzAmbiente=true;
+        int velocidad=1; //normal
 
         // PALO
         float angPalo=180;
