@@ -23,48 +23,39 @@ Pelota::Pelota(int id,float radio,GLuint tex)
 Pelota::~Pelota(){}
 
 /* MOVIMIENTO */
-void Pelota::dibujarPelota(bool pausa){
-    if (lastPos[0] != pos[0] || lastPos[1] != pos[1]){
-        ejeRotacion={lastPos[1] - pos[1], pos[0] - lastPos[0]};
-        double dist = hypot(pos[0]-lastPos[0],pos[1]-lastPos[1]);
-        angulo += (180/(radio * PI)) * dist;
-    }
+void Pelota::dibujarPelota(){
     glPushMatrix();
     glTranslatef(pos[0],pos[1],0);
+    glRotatef(angulo,ejeRotacion[0],ejeRotacion[1],0);
     for (int i=0;i<rotaciones.size();i++)
         glRotatef(rotaciones[i][0],rotaciones[i][1],rotaciones[i][2],0);
-    glRotatef(angulo,ejeRotacion[0],ejeRotacion[1],0);
     glBindTexture(GL_TEXTURE_2D, tex);
     drawHalfSphere(30, 30, radio);
     glPopMatrix();
 }
 
-void Pelota::actualizarPosYVel(int velocidad){
+void Pelota::actualizarPosYVel(){
+    // POSICION
     setLastPos(pos[0],pos[1]);
+    setPos(pos[0]+vel[0],pos[1]+vel[1]);
 
-    pos[0] += vel[0];
-    pos[1] += vel[1];
-
-    bool actualizarVel;
-    if (velocidad==0) actualizarVel = (frame==0); //slowmo
-    if (velocidad==1) actualizarVel = ((frame==0) || (frame==2)); //normal
-    if (velocidad==2) actualizarVel = true; //rapido
-
-    if (actualizarVel){
-        double normVel=hypot(vel[0],vel[1]);
-        normVel *= 0.98;
-        normVel -= 0.0001;
-
-        if (normVel <= 0) vel[0]=vel[1]=0;
-        else {
-            double aux = hypot(vel[0],vel[1]);
-            vel[0] *= normVel/aux;
-            vel[1] *= normVel/aux;
-        }
+    // VELOCIDAD
+    double normVel=hypot(vel[0],vel[1]);
+    normVel *= 0.995;
+    normVel -= 0.000003;
+    if (normVel <= 0) vel[0]=vel[1]=0;
+    else {
+        double aux = hypot(vel[0],vel[1]);
+        setVel(vel[0]*(normVel/aux),vel[1]*(normVel/aux));
     }
 
-    frame++;
-    if (frame==4) frame=0;
+    // GIRO
+    if (lastPos[0] != pos[0] || lastPos[1] != pos[1]){
+        ejeRotacion={lastPos[1] - pos[1], pos[0] - lastPos[0]};
+        double dist = hypot(pos[0]-lastPos[0],pos[1]-lastPos[1]);
+        angulo += (180/(radio * PI)) * dist;
+    }
+
 }
 
 void Pelota::chequearBordes(){
@@ -172,6 +163,6 @@ void Pelota::drawHalfSphere(int lats, int longs, GLfloat r) {
 
 void Pelota::guardarRotacion(){
     std::vector<double> aux = {angulo, ejeRotacion[0], ejeRotacion[1]};
-    rotaciones.push_back(aux);
+    rotaciones.insert(rotaciones.begin(),aux);
     angulo=0;
 }

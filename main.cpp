@@ -3,6 +3,7 @@
 #include "SDL/SDL_opengl.h"
 #include "src/Juego.h"
 #include <chrono>
+#include <cmath>
 
 #define FPS 60
 
@@ -27,13 +28,18 @@ int main(int argc, char *argv[]) {
         exit(1);
     }
 
-
+    int velocidad = 1;
+    int siguienteVelocidad;
     Juego *juego = new Juego();
     juego->inicializar();
     do{
         auto inicio = std::chrono::steady_clock::now();
-        juego->mainLoop();
 
+        for (int i=0;i<std::pow(3,velocidad);i++) siguienteVelocidad = juego->procesarFisica();
+        juego->dibujarJuego();
+        velocidad = siguienteVelocidad;
+
+        glFinish();
         std::chrono::duration<double,std::micro> transcurrido = std::chrono::steady_clock::now() - inicio;
         while (transcurrido < std::chrono::duration<double,std::micro>(1000000/60)) {
             transcurrido = std::chrono::steady_clock::now() - inicio;

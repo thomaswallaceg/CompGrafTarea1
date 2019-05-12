@@ -10,7 +10,8 @@ class Juego
         Juego();
         ~Juego();
         void inicializar();
-        void mainLoop();
+        void dibujarJuego();
+        int procesarFisica();
         bool salir();
 
     private:
@@ -41,7 +42,7 @@ class Juego
         float sens = 0.4; // Sensibilidad
         bool mouseCam=false;
         bool luzAmbiente=true;
-        int velocidad=1; //normal
+        int velocidad; //normal
 
         // PALO
         float angPalo=180;
@@ -54,7 +55,6 @@ class Juego
         float radio = 0.16;
         bool movimientoPelotas;
         std::vector<Pelota*> pelotas;
-        std::vector<std::vector<bool>> colisiones;
 
         void viewOrtho();
         void viewPerspective();

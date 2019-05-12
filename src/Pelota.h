@@ -28,9 +28,9 @@ class Pelota
         bool getMetida();
         void setMetida(bool met);
 
-        void actualizarPosYVel(int velocidad);
+        void actualizarPosYVel();
         void chequearBordes();
-        void dibujarPelota(bool pausa);
+        void dibujarPelota();
         void cargarTextura();
         void guardarRotacion();
 
@@ -41,7 +41,6 @@ class Pelota
         std::vector<double> pos, lastPos, vel, ejeRotacion;
         std::vector<std::vector<double>> rotaciones;
         double angulo = 0;
-        int frame = 0;
 
         GLuint tex;
         int ultimoChoque = -1;

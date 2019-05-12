@@ -10,17 +10,14 @@
 #define MESA 2
 
 Juego::Juego(){
-    recursos = new Recursos();
+    recursos = new Recursos();    velocidad = 1;
+
     // PELOTAS
     for (int i=0; i<16;i++){
         GLuint tex = recursos->cargarTexturaPelota(i);        pelotas.push_back(new Pelota(i,radio,tex));
         std::vector<bool> aux;
-        colisiones.push_back(aux);
-        for (int j=0; j<pelotas.size();j++){
-            colisiones[i].push_back(false);
-        }
     }
-
+    velocidad = 1;
     posicionesIniciales();
 
 }
@@ -46,7 +43,33 @@ void Juego::inicializar(){
     recursos->cargarHUD();
 }
 
-void Juego::mainLoop(){
+int Juego::procesarFisica(){
+    if (pelotas[0]->getMetida() && !movimientoPelotas){
+        pelotas[0]->setMetida(false);
+        pelotas[0]->setVel(0,0);
+        pelotas[0]->setPos(2.5,2.5);
+        pelotas[0]->setUltimoChoque(-1);
+        pelotas[0]->setLastPos(2.5,2.5);
+    }
+
+    movimientoPelotas = false;
+    for (int i=0; i < pelotas.size(); i++){
+        if (!pelotas[i]->getMetida()){
+            if (!pausa) {
+                pelotas[i]->actualizarPosYVel();
+                if (pelotas[i]->getVel()[0] != 0 || pelotas[i]->getVel()[1] != 0) movimientoPelotas = true;
+                pelotas[i]->chequearBordes();
+                for (int j=i+1; j < pelotas.size(); j++)
+                    if (!pelotas[j]->getMetida()) chequearColision(i,j);
+            }
+        }
+    }
+
+    procesarEntrada();
+    return velocidad;
+}
+
+void Juego::dibujarJuego(){
     if (!mostrarTexturas) glDisable(GL_TEXTURE_2D);
     else glEnable(GL_TEXTURE_2D);
 
@@ -100,32 +123,13 @@ void Juego::mainLoop(){
     glMaterialf(GL_FRONT_AND_BACK, GL_DIFFUSE, 70);
     glMaterialf(GL_FRONT_AND_BACK, GL_AMBIENT, 50);
 
-    if (pelotas[0]->getMetida() && !movimientoPelotas){
-        pelotas[0]->setMetida(false);
-        pelotas[0]->setVel(0,0);
-        pelotas[0]->setPos(2.5,2.5);
-        pelotas[0]->setUltimoChoque(-1);
-        pelotas[0]->setLastPos(2.5,2.5);
-    }
 
-    movimientoPelotas = false;
     for (int i=0; i < pelotas.size(); i++){
         if (!pelotas[i]->getMetida()){
-            if (!pausa) {
-                pelotas[i]->actualizarPosYVel(velocidad);
-                if (pelotas[i]->getVel()[0] != 0 || pelotas[i]->getVel()[1] != 0) movimientoPelotas = true;
-                pelotas[i]->chequearBordes();
-                for (int j=i+1; j < pelotas.size(); j++)
-                    if (!pelotas[j]->getMetida()) chequearColision(i,j);
-            pelotas[i]->dibujarPelota(pausa);
-            }
-        } else {
-            for (int k=0; k<pelotas.size(); k++){
-                colisiones[i][k]=false;
-                colisiones[k][i]=false;
-            }
+            pelotas[i]->dibujarPelota();
         }
     }
+
 
     //PALO
     if (!movimientoPelotas && !pausa && camara!=LIBRE){
@@ -220,7 +224,7 @@ void Juego::mainLoop(){
 
         // IZQUIERDA
         for (int i = 0; i < 7; i++){
-            if (pelotas[i]->getMetida())
+            if (pelotas[i+1]->getMetida())
                 recursos->texturaHUD(2);
             else
                 recursos->texturaHUD(1);
@@ -257,9 +261,6 @@ void Juego::mainLoop(){
     viewPerspective();
 
     glDisable(GL_TEXTURE_2D);
-    velocidad=1;
-
-    procesarEntrada();
 
     SDL_GL_SwapBuffers();
 }
@@ -298,14 +299,14 @@ void Juego::chequearColision(int i, int j){
                 pelotas[i]->setVel(normal[0]*vnj + tangente[0]*vti, normal[1]*vnj + tangente[1]*vti);
                 pelotas[j]->setVel(normal[0]*vni + tangente[0]*vtj, normal[1]*vni + tangente[1]*vtj);
             }
-        } else colisiones[i][j]=false;
+        }
     }
 }
 
 void Juego::shoot(){
     double velx = cos((angPalo-90)*PI/180);
     double vely = sin((angPalo-90)*PI/180);
-    pelotas[0]->setVel((velx*distPalo/2)/4,(vely*distPalo/2)/4);
+    pelotas[0]->setVel((velx*distPalo/2)/6,(vely*distPalo/2)/6);
     distPalo = 0;
 }
 
@@ -335,7 +336,6 @@ void Juego::viewPerspective(){
 void Juego::posicionesIniciales(){
     for (int i=0; i < 16; i++){
         pelotas[i]->setVel(0,0);
-        for (int j=0; j < 16;j++) colisiones[i][j]=false;
     }
 
     double centroTximpar = 2.5;
@@ -441,14 +441,6 @@ void Juego::procesarEntrada(){
                         distPalo += 0.02;
                         if(distPalo>=2) distPalo=2;
                         break;
-                    case SDLK_r:
-                        rad-=.05;//factor de ajuste: 0,05
-                        if (rad < 0.5) rad = 0.5;
-                        break;
-                    case SDLK_f:
-                        rad+=.05;//factor de ajuste: 0,05
-                        if (rad > 12) rad = 12;
-                        break;
                     case SDLK_LSHIFT:
                         centroz+=0.1;
                         if (centroz > 10) centroz=10;
@@ -493,10 +485,10 @@ void Juego::procesarEntrada(){
                             angPalo=anga;
                         }
                         break;
-                    case SDLK_9: // lento
+                    case SDLK_COMMA: // lento
                         velocidad=0;
                         break;
-                    case SDLK_0: // rapido
+                    case SDLK_PERIOD: // rapido
                         velocidad=2;
                         break;
                     }
@@ -551,6 +543,22 @@ void Juego::procesarEntrada(){
                             break;
                         case SDLK_F12:
                             luzAmbiente=!luzAmbiente;
+                            break;
+                        case SDLK_COMMA: // lento
+                            //if (velocidad != 0) velocidad=0;
+                            //else velocidad = 1;
+                            velocidad = 1;
+                            break;
+                        case SDLK_PERIOD: // rapido
+                            velocidad = 1;
+                            break;
+                        case SDLK_9:
+                            if (velocidad != 0) velocidad=0;
+                            else velocidad = 1;
+                            break;
+                        case SDLK_0:
+                            if (velocidad != 2) velocidad=2;
+                            else velocidad = 1;
                             break;
                 }
                 break;
