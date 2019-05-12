@@ -36,7 +36,7 @@ GLuint Recursos::cargarTexturaPelota(int id){
 }
 
 void Recursos::cargarHUD(){
-    for (int i=0; i<4; i++){
+    for (int i=0; i<17; i++){
         GLuint aux;
         texHUD.push_back(aux);
         std::stringstream str;

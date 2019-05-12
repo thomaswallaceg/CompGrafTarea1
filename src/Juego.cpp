@@ -197,7 +197,7 @@ void Juego::dibujarJuego(){
     viewOrtho();
 
     if (controles) {
-        recursos->texturaHUD(3);
+        recursos->texturaHUD(16);
         glBegin(GL_QUADS);
             glTexCoord2f(0,0);
             glVertex2f(0,0);
@@ -209,7 +209,7 @@ void Juego::dibujarJuego(){
             glVertex2f(0,720);
         glEnd();
     } else {
-        recursos->texturaHUD(0);
+        recursos->texturaHUD(14);
         glBegin(GL_QUADS);
             // ABAJO
             glTexCoord2f(0,0.25);
@@ -225,9 +225,9 @@ void Juego::dibujarJuego(){
         // IZQUIERDA
         for (int i = 0; i < 7; i++){
             if (pelotas[i+1]->getMetida())
-                recursos->texturaHUD(2);
+                recursos->texturaHUD(15);
             else
-                recursos->texturaHUD(1);
+                recursos->texturaHUD(i);
             glBegin(GL_QUADS);
                 glTexCoord2f(0,0);
                 glVertex2f(10,150+i*60);
@@ -243,9 +243,9 @@ void Juego::dibujarJuego(){
         // DERECHA
         for (int i = 0; i < 7; i++){
             if (pelotas[i+9]->getMetida())
-                recursos->texturaHUD(2);
+                recursos->texturaHUD(15);
             else
-                recursos->texturaHUD(1);
+                recursos->texturaHUD(i+7);
             glBegin(GL_QUADS);
                 glTexCoord2f(0,0);
                 glVertex2f(1210,150+i*60);
