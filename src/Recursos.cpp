@@ -9,11 +9,11 @@ Recursos::~Recursos(){}
 void Recursos::cargarModelo(int modelo){
     if (modelo==1) {
         bool res2 = loadObj("mod/cue.obj",verticesPalo,uvsPalo,normalesPalo);
-        std::string archivoPalo = "tex/poolPalo.jpg";
+        std::string archivoPalo = "tex/palo.png";
         loadText(texPalo,archivoPalo);
     } else if (modelo==2) {
         bool res = loadObj("mod/mesa.obj", verticesMesa, uvsMesa, normalesMesa);
-        std::string archivoMesa = "tex/mesaAzul.png";
+        std::string archivoMesa = "tex/mesa.png";
         loadText(texMesa,archivoMesa);
     }
 }

@@ -16,6 +16,9 @@ Pelota::Pelota(int id,float radio,GLuint tex)
     vel=std::vector<double>(2);
     lastPos=std::vector<double>(2);
     ejeRotacion=std::vector<double>(2);
+    std::vector<double> aux = {rand() % 359, static_cast <float> (rand()) / static_cast <float> (RAND_MAX), static_cast <float> (rand()) / static_cast <float> (RAND_MAX)};
+    rotaciones.insert(rotaciones.begin(),aux);
+    angulo=0;
     vel[0]=vel[1]=pos[0]=pos[1]=lastPos[0]=lastPos[1]=ejeRotacion[0]=ejeRotacion[1]=0;
     ultimoChoque = -1;
 }
@@ -30,7 +33,7 @@ void Pelota::dibujarPelota(){
     for (int i=0;i<rotaciones.size();i++)
         glRotatef(rotaciones[i][0],rotaciones[i][1],rotaciones[i][2],0);
     glBindTexture(GL_TEXTURE_2D, tex);
-    drawHalfSphere(30, 30, radio);
+    drawHalfSphere(20, 20, radio);
     glPopMatrix();
 }
 
@@ -41,7 +44,7 @@ void Pelota::actualizarPosYVel(){
 
     // VELOCIDAD
     double normVel=hypot(vel[0],vel[1]);
-    normVel *= 0.995;
+    normVel *= 0.996;
     normVel -= 0.000003;
     if (normVel <= 0) vel[0]=vel[1]=0;
     else {

@@ -43,26 +43,31 @@ class Juego
         bool mouseCam=false;
         bool luzAmbiente=true;
         int velocidad; //normal
+        bool botonIzquierdoApretado=false;
+
+        void viewOrtho();
+        void viewPerspective();
+        void actualizarCamaraLibre(float x_angle, float y_angle,float radius);
+        void actualizarCamaraPalo(float x_angle);
+        void loadParedes();
+
+        // JUEGO
+        bool chequearFin=false;
 
         // PALO
         float angPalo=180;
         float distPalo=0;
         bool girarPalo=true;
 
-        bool botonIzquierdoApretado=false;
 
         // PELOTAS
         float radio = 0.16;
         bool movimientoPelotas;
         std::vector<Pelota*> pelotas;
 
-        void viewOrtho();
-        void viewPerspective();
         void shoot();
-        void procesarEntrada();
         void posicionesIniciales();
         void chequearColision(int i, int j);
-        void actualizarCamaraLibre(float x_angle, float y_angle,float radius);
-        void actualizarCamaraPalo(float x_angle);
-        void loadParedes();
+
+        void procesarEntrada();
 };

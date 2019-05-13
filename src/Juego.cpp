@@ -2,6 +2,7 @@
 #include "SDL/SDL.h"
 #include "SDL/SDL_opengl.h"
 #include <math.h>
+#include <ctime>
 
 #define PI 3.14159265
 #define TECHO 0
@@ -11,7 +12,7 @@
 
 Juego::Juego(){
     recursos = new Recursos();    velocidad = 1;
-
+    srand (static_cast <unsigned> (time(0)));
     // PELOTAS
     for (int i=0; i<16;i++){
         GLuint tex = recursos->cargarTexturaPelota(i);        pelotas.push_back(new Pelota(i,radio,tex));
@@ -55,6 +56,7 @@ int Juego::procesarFisica(){
         pelotas[0]->setUltimoChoque(-1);
         pelotas[0]->setLastPos(2.5,2.5);
     }
+    if (pelotas[8]->getMetida() && !movimientoPelotas) posicionesIniciales();
 
     movimientoPelotas = false;
     for (int i=0; i < pelotas.size(); i++){
@@ -92,6 +94,8 @@ void Juego::dibujarJuego(){
     if (camara == LIBRE) {
         if (angb > 40) angb = 40;
         if (angb < -25) angb = -25;
+        if (rad < 1) rad = 1;
+        if (rad > 10) rad = 10;
         actualizarCamaraLibre(anga,angb,rad);
         gluLookAt(x+centrox,y+centroy,z+centroz,centrox,centroy,centroz,0,0,1);
     }
@@ -155,7 +159,6 @@ void Juego::dibujarJuego(){
 
 
     /////paredes
-    glEnable(GL_TEXTURE_2D);
     loadParedes();
 
     // LUZ 0
@@ -347,6 +350,7 @@ void Juego::viewPerspective(){
 void Juego::posicionesIniciales(){
     for (int i=0; i < 16; i++){
         pelotas[i]->setVel(0,0);
+        pelotas[i]->setMetida(false);
     }
 
     double centroTximpar = 2.5;
@@ -451,15 +455,7 @@ void Juego::procesarEntrada(){
                         distPalo += 0.02;
                         if(distPalo>=2) distPalo=2;
                         break;
-                    case SDLK_LSHIFT:
-                        centroz+=0.1;
-                        if (centroz > 10) centroz=10;
-                        break;
-                    case SDLK_SPACE:
-                        centroz-=0.1;
-                        if (centroz < 0.5) centroz=0.5;
-                        break;
-                    case SDLK_w:
+                    case SDLK_s:
                         if (camara==LIBRE){
                             centrox+=0.1;
                             if (centrox > 13) centrox=13;
@@ -468,7 +464,7 @@ void Juego::procesarEntrada(){
                             if(distPalo<=0) distPalo=0;
                         }
                         break;
-                    case SDLK_s:
+                    case SDLK_w:
                         if (camara==LIBRE){
                             centrox-=0.1;
                             if (centrox < -3) centrox=-3;
@@ -501,6 +497,12 @@ void Juego::procesarEntrada(){
                     case SDLK_PERIOD: // rapido
                         velocidad=2;
                         break;
+                    case SDLK_r:
+                        rad-=0.1;
+                        break;
+                    case SDLK_f:
+                        rad+=0.1;
+                        break;
                     }
                     break;
                 case SDL_KEYUP:
@@ -508,7 +510,7 @@ void Juego::procesarEntrada(){
                         case SDLK_v:
                             camara = (camara+1) % 3;
                             if (camara == LIBRE) {
-                                anga=180;
+                                anga=0;
                                 angb=35;
                                 rad=10;
                                 centrox = 2.5;
@@ -555,8 +557,6 @@ void Juego::procesarEntrada(){
                             luzAmbiente=!luzAmbiente;
                             break;
                         case SDLK_COMMA: // lento
-                            //if (velocidad != 0) velocidad=0;
-                            //else velocidad = 1;
                             velocidad = 1;
                             break;
                         case SDLK_PERIOD: // rapido
@@ -579,7 +579,7 @@ void Juego::procesarEntrada(){
 void Juego::loadParedes(){
     float x0 = -13;
     float y0 = -13;
-    float z0 = -3.3;
+    float z0 = -3.33;
     float x1 = 18;
     float y1 = 23;
     float z1 = 8;
