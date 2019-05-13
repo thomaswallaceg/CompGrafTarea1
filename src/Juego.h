@@ -32,7 +32,7 @@ class Juego
         int camara = 0;// techo
         float anga=180; // Ángulo horizontal
         float angb=0; // Ángulo vertical
-        float rad=5; // Radio
+        float rad=4; // Radio
         float x=0; // Posición cámara libre
         float y=0; // Posición cámara libre
         float z=0; // Posición cámara libre
@@ -64,4 +64,5 @@ class Juego
         void chequearColision(int i, int j);
         void actualizarCamaraLibre(float x_angle, float y_angle,float radius);
         void actualizarCamaraPalo(float x_angle);
+        void loadParedes();
 };

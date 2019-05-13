@@ -14,6 +14,8 @@ class Recursos
         GLuint cargarTexturaPelota(int id);
         void cargarHUD();
         void texturaHUD(int i);
+        void cargarTextParedes();
+        void texturaParedes(int i);
 
     private:
 
@@ -28,6 +30,7 @@ class Recursos
         GLuint texPalo=0;
 
         std::vector<GLuint> texHUD;
+        std::vector<GLuint> texParedes;
 
         void drawObj(GLuint text,std::vector<glm::vec3> vertices,std::vector<glm::vec2> uvs,std::vector<glm::vec3> normals);
         bool loadObj(const char *path,std::vector<glm::vec3> &out_vertices,std::vector<glm::vec2> &out_uvs,std::vector<glm::vec3> &out_normals);

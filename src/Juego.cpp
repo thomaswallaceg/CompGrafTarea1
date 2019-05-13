@@ -41,6 +41,10 @@ void Juego::inicializar(){
     recursos->cargarModelo(PALO);
     recursos->cargarModelo(MESA);
     recursos->cargarHUD();
+
+    recursos->cargarTextParedes();
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 }
 
 int Juego::procesarFisica(){
@@ -86,6 +90,8 @@ void Juego::dibujarJuego(){
     glColor3f(1,1,1);
 
     if (camara == LIBRE) {
+        if (angb > 40) angb = 40;
+        if (angb < -25) angb = -25;
         actualizarCamaraLibre(anga,angb,rad);
         gluLookAt(x+centrox,y+centroy,z+centroz,centrox,centroy,centroz,0,0,1);
     }
@@ -146,6 +152,11 @@ void Juego::dibujarJuego(){
         recursos->dibujarModelo(PALO);
         glPopMatrix();
     }
+
+
+    /////paredes
+    glEnable(GL_TEXTURE_2D);
+    loadParedes();
 
     // LUZ 0
     glEnable(GL_LIGHTING);
@@ -399,8 +410,7 @@ void Juego::procesarEntrada(){
                     if (camara==LIBRE){
                             anga+=evento.motion.xrel*sens;//factor de ajuste: 0,4
                             angb-=evento.motion.yrel*sens;//factor de ajuste: 0,4
-                            if (angb > 85) angb = 85;
-                            if (angb < -85) angb = -85;
+
                     } else {
                         if(girarPalo){
                             angPalo += evento.motion.xrel*sens;
@@ -563,5 +573,94 @@ void Juego::procesarEntrada(){
                 }
                 break;
             }
+    }
+}
+
+void Juego::loadParedes(){
+    float x0 = -13;
+    float y0 = -13;
+    float z0 = -3.3;
+    float x1 = 18;
+    float y1 = 23;
+    float z1 = 8;
+
+    //Pared
+    recursos->texturaParedes(3);
+    glNormal3f(0,1,0);
+    glBegin(GL_QUADS);
+        glTexCoord2d(6,0);
+        glVertex3f(x1,y0,z0);
+        glTexCoord2d(6,6);
+        glVertex3f(x1,y0,z1);
+        glTexCoord2d(0,6);
+        glVertex3f(x0,y0,z1);
+        glTexCoord2d(0,0);
+        glVertex3f(x0,y0,z0);
+    glEnd();
+        //pared
+    recursos->texturaParedes(0);
+    glNormal3f(1,0,0);
+    glBegin(GL_QUADS);
+        glTexCoord2f(0,1);
+        glVertex3f(x0,y0,z1);
+        glTexCoord2f(0,0);
+        glVertex3f(x0,y0,z0);
+        glTexCoord2f(16,0);
+        glVertex3f(x0,y1,z0);
+        glTexCoord2f(16,1);
+        glVertex3f(x0,y1,z1);
+    glEnd();
+        //pared
+    recursos->texturaParedes(2);
+    glNormal3f(0,-1,0);
+    glBegin(GL_QUADS);
+        glTexCoord2f(0,0);
+        glVertex3f(x0,y1,z0);
+        glTexCoord2f(0,4);
+        glVertex3f(x0,y1,z1);
+        glTexCoord2f(6,4);
+        glVertex3f(x1,y1,z1);
+        glTexCoord2f(6,0);
+        glVertex3f(x1,y1,z0);
+    glEnd();
+        //pared
+    recursos->texturaParedes(0);
+    glNormal3f(-1,0,0);
+    glBegin(GL_QUADS);
+        glTexCoord2f(16,0);
+        glVertex3f(x1,y1,z0);
+        glTexCoord2f(16,1);
+        glVertex3f(x1,y1,z1);
+        glTexCoord2f(0,1);
+        glVertex3f(x1,y0,z1);
+        glTexCoord2f(0,0);
+        glVertex3f(x1,y0,z0);
+    glEnd();
+        //piso
+    recursos->texturaParedes(1);
+    glNormal3f(0,0,1);
+    glBegin(GL_QUADS);
+        glTexCoord2f(0,0);
+        glVertex3f(x0,y0,z0);
+        glTexCoord2f(0,8);
+        glVertex3f(x0,y1,z0);
+        glTexCoord2f(8,8);
+        glVertex3f(x1,y1,z0);
+        glTexCoord2f(8,0);
+        glVertex3f(x1,y0,z0);
+    glEnd();
+        //techo
+    if(camara!=TECHO){
+        glNormal3f(0,0,-1);
+        glBegin(GL_QUADS);
+            glTexCoord2f(0,0);
+            glVertex3f(x0,y0,z1);
+            glTexCoord2f(0,1);
+            glVertex3f(x0,y1,z1);
+            glTexCoord2f(1,1);
+            glVertex3f(x1,y1,z1);
+            glTexCoord2f(1,0);
+            glVertex3f(x1,y0,z1);
+        glEnd();
     }
 }

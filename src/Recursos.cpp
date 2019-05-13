@@ -156,3 +156,20 @@ void Recursos::loadText(GLuint &text,std::string archivo){
 
     delete datos;
 }
+
+
+
+void Recursos::cargarTextParedes(){
+    for (int i=0; i<4; i++){
+        GLuint aux;
+        texParedes.push_back(aux);
+        std::stringstream str;
+        str << i;
+        std::string archivo = "tex/paredes/pared" + str.str() + ".png";
+        loadText(texParedes[i],archivo);
+    }
+}
+
+void Recursos::texturaParedes(int i){
+    glBindTexture(GL_TEXTURE_2D,texParedes[i]);
+}
